@@ -1,0 +1,143 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+
+  .animation-delay-6000 {
+    animation-delay: 6s;
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  }
+
+  .glass-card-hover {
+    transition: all 0.3s ease;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .text-gradient-1 {
+    @apply bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent;
+  }
+}
+
+@keyframes blob {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+:root {
+  --color-background: 251 45% 9%;
+  --color-foreground: 0 0% 100%;
+  --color-primary: 210 90% 55%;
+  --color-primary-foreground: 0 0% 9%;
+  --color-secondary: 260 80% 50%;
+  --color-secondary-foreground: 0 0% 100%;
+  --color-tertiary: 280 76% 44%;
+  --color-tertiary-foreground: 0 0% 100%;
+  --color-border: 255 12% 65%;
+  --color-ring: 210 90% 55%;
+  --color-muted: 255 8% 25%;
+  --color-muted-foreground: 255 20% 85%;
+  --color-accent: 210 90% 55%;
+  --color-accent-foreground: 0 0% 100%;
+  --color-destructive: 0 84% 60%;
+  --color-destructive-foreground: 0 0% 100%;
+  --color-card: 255 8% 15%;
+  --color-card-foreground: 0 0% 100%;
+  --color-popover: 251 45% 9%;
+  --color-popover-foreground: 0 0% 100%;
+  --border-radius: 0.75rem;
+  --font-sans: "DM Sans", sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  background: hsl(var(--color-background));
+  color: hsl(var(--color-foreground));
+  overflow-x: hidden;
+}
+
+.perspective-1200 {
+  perspective: 1200px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+/* ======================================
+   Curved Bottom Glow + Shadow Support
+====================================== */
+
+.bottom-glow {
+  position: relative;
+  height: 100%;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.bottom-glow::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: -1px;
+  height: 3px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(139, 92, 246, 0.95),
+    rgba(59, 130, 246, 0.95),
+    transparent
+  );
+
+  border-radius: 999px;
+  filter: blur(1.2px);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+/* show glow on hover */
+.group:hover .bottom-glow::after {
+  opacity: 1;
+}
+html{
+  scroll-behavior: smooth;
+}
