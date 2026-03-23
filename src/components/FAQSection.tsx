@@ -11,11 +11,11 @@ export default function FAQSection() {
     {
       question: "What is EasyHunt?",
       answer:
-        "EasyHunt is a keyword search platform for Maharashtra land records from government Excel datasets like Bhulekh and Mahabhumi. Type any term—owner name, survey number, village—and get full matching records in seconds. It's for quick discovery, not official verification."
-,
+        "EasyHunt is a keyword search platform for Maharashtra land records from government Excel datasets like Bhulekh and Mahabhumi. Type any term—owner name, survey number, village—and get full matching records in seconds. It's for quick discovery, not official verification.",
     },
     {
-      question: "How does EasyHunt differ from government portals like IGR, Bhulekh, or Mahabhumi?",
+      question:
+        "How does EasyHunt differ from government portals like IGR, Bhulekh, or Mahabhumi?",
       answer:
         "Government sites show one record at a time with no keyword search; they're slow and best for final checks. EasyHunt scans bulk files instantly across keywords, showing complete entries—saving 70-80% time for title searches (TSR) and due diligence.",
     },
@@ -31,7 +31,8 @@ export default function FAQSection() {
     },
     {
       question: "Who should use EasyHunt?",
-      answer: "No, it's research data from government sources for fast discovery. Always verify matches on official portals (IGR eSearch, Mahabhumi) for legal use. Reduces risk by spotting what to check.",
+      answer:
+        "Lawyers, real estate agents, brokers, investors, and anyone doing property title search (TSR) or due diligence in Maharashtra.",
     },
     {
       question: "How accurate are the search results?",
@@ -43,6 +44,8 @@ export default function FAQSection() {
   return (
     <section id="faq" className="py-16 md:py-24 bg-background">
       <div className="max-w-4xl mx-auto px-8 md:px-16">
+        
+        {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -55,10 +58,10 @@ export default function FAQSection() {
           </h2>
           <p className="text-body text-gray-300">
             EasyHunt simplifies property document searches in Maharashtra. Here are answers to common questions from lawyers, brokers, and users.
-
           </p>
         </motion.div>
 
+        {/* FAQ */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -70,18 +73,22 @@ export default function FAQSection() {
               <AccordionItem
                 key={`item-${index}`}
                 value={`item-${index}`}
-                className="text-left text-body text-gray-300"
+                className="border border-gray-700 rounded-xl px-4 py-2 bg-[#111] transition-all duration-300"
               >
-                <AccordionTrigger className="text-left text-body text-gray-300">
+                {/* Question */}
+                <AccordionTrigger className="text-left text-body text-gray-300 font-semibold hover:text-white transition-colors duration-200">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-body text-gray-300">
+
+                {/* Answer */}
+                <AccordionContent className="text-body text-gray-300 font-normal leading-relaxed transition-all duration-300 ease-in-out">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
         </motion.div>
+
       </div>
     </section>
   );

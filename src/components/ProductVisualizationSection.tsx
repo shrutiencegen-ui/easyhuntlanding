@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import OrbitAnimation from "./OrbitAnimation";
+import { ArrowRight } from "lucide-react";
 
 export default function ProductVisualizationSection() {
   return (
@@ -60,6 +61,7 @@ export default function ProductVisualizationSection() {
 
             <Button size="lg" variant="default" className="px-10">
               Learn More
+              <ArrowRight className="w-5 h-5 text-purple-400 group-hover:text-white transition-all duration-300 group-hover:translate-x-1" />
             </Button>
           </motion.div>
 

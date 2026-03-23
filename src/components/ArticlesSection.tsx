@@ -30,9 +30,9 @@ export default function ArticlesSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-h2 md:text-5xl font-medium mb-4 text-foreground">
-            Latest insights
-          </h2>
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight mb-6 text-white">
+              Latest <span className="text-gradient-1">Insights</span>
+            </h2>
           <p className="text-body text-gray-300 max-w-2xl mx-auto">
             Understanding property research and document intelligence
           </p>

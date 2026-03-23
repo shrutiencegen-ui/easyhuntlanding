@@ -4,6 +4,18 @@
   background: radial-gradient(circle at 50% 0%, #1a103a 0%, #0a071a 60%, #070512 100%);
   color: #fff;
 }
+.send-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Toast styling (optional) */
+.contact-form input, .contact-form textarea {
+  outline: none;
+}
+.contact-form input:focus {
+  border-color: #a855f7; /* Purple glow on focus */
+}
 
 /* WRAPPER */
 .contact-wrapper{

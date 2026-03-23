@@ -2,76 +2,110 @@ import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useNavigate, useLocation } from "react-router-dom"
-import DemoModal from "./DemoModal";
+
 type Props = {
   openDemo: () => void;
 };
+
 export default function Navbar({ openDemo }: Props) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState("home")
-  const [demoOpen, setDemoOpen] = useState(false);
 
   const navigate = useNavigate()
   const location = useLocation()
 
-  // Detect scroll background
+  /* ✅ Navbar background on scroll */
   useEffect(() => {
-    const onScroll = () => {
+    const handleScroll = () => {
       setScrolled(window.scrollY > 10)
-
-      const sections = [
-        "home",
-        "platform",
-        "how-it-works",
-        "product",
-        "showcase",
-        "faq",
-        "footer",
-      ]
-
-      for (const id of sections) {
-        const el = document.getElementById(id)
-        if (el) {
-          const rect = el.getBoundingClientRect()
-          if (rect.top <= 120 && rect.bottom >= 120) {
-            setActive(id)
-            break
-          }
-        }
-      }
     }
 
-    onScroll()
-    window.addEventListener("scroll", onScroll)
-    return () => window.removeEventListener("scroll", onScroll)
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // Smooth scroll handler
+  /* ✅ PERFECT ACTIVE TAB (Intersection Observer) */
+  useEffect(() => {
+    const sections = [
+      "home",
+      "how-it-works",
+      "product",
+      "platform",
+      "faq",
+      "contact",
+    ]
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActive(entry.target.id)
+          }
+        })
+      },
+      {
+        root: null,
+        rootMargin: "-20% 0px -60% 0px",
+        threshold: 0,
+      }
+    )
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    })
+
+    return () => {
+      sections.forEach((id) => {
+        const el = document.getElementById(id)
+        if (el) observer.unobserve(el)
+      })
+    }
+  }, [])
+  useEffect(() => {
+  const handleScrollEnd = () => {
+    const bottom =
+      window.innerHeight + window.scrollY >= document.body.offsetHeight - 50;
+
+    if (bottom) {
+      setActive("contact");
+    }
+  };
+
+  window.addEventListener("scroll", handleScrollEnd);
+  return () => window.removeEventListener("scroll", handleScrollEnd);
+}, []);
+
+  /* ✅ Route change handling */
+  useEffect(() => {
+    if (location.pathname !== "/") {
+      setActive("")
+    }
+  }, [location.pathname])
+
+  /* ✅ Smooth navigation */
   const scrollToSection = (id: string) => {
     setOpen(false)
 
     if (location.pathname !== "/") {
-      navigate("/")
-      setTimeout(() => {
-        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
-      }, 200)
+      navigate("/", { state: { scrollTo: id } })
     } else {
       document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
     }
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 pointer-events-auto">
+    <header className="fixed top-0 left-0 right-0 z-50">
 
-      {/* Scroll Progress Line */}
+      {/* Progress Line */}
       <motion.div
         className="absolute top-0 left-0 h-[2px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
         style={{ width: scrolled ? "100%" : "0%" }}
         transition={{ duration: 0.4 }}
       />
 
-      {/* Glow Strip */}
+      {/* Glow */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-r from-purple-700/20 via-indigo-600/10 to-purple-700/20 blur-2xl" />
 
       <div
@@ -82,20 +116,18 @@ export default function Navbar({ openDemo }: Props) {
         }`}
       >
         <div className="max-w-7xl mx-auto px-10 lg:px-16 h-[72px] flex items-center justify-between">
-          {/* Logo */}
+
+          {/* ✅ LOGO FIXED */}
           <div
-  onClick={() => scrollToSection("home")}
-  className="flex items-center gap-3 cursor-pointer select-none"
->
-  <img
-    src="/easyhunt.png"
-    alt="Easy Hunt Logo"
-    className="h-12 w-auto object-contain"
-
-  />
- 
-</div>
-
+            onClick={() => scrollToSection("home")}
+            className="flex items-center gap-3 cursor-pointer select-none"
+          >
+              <img
+  src="/easyhunt-logo.png"
+  alt="Easy Hunt Logo"
+  className="h-20 md:h-24 lg:h-28 w-auto object-contain"
+/>
+          </div>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8 text-[15px]">
@@ -104,19 +136,17 @@ export default function Navbar({ openDemo }: Props) {
             <NavLink active={active === "product"} onClick={() => scrollToSection("product")}>Features</NavLink>
             <NavLink active={active === "platform"} onClick={() => scrollToSection("platform")}>Platform</NavLink>
             <NavLink active={active === "faq"} onClick={() => scrollToSection("faq")}>FAQs</NavLink>
-            <NavLink active={active === "footer"} onClick={() => scrollToSection("footer")}>Contact</NavLink>
-            
+            <NavLink active={active === "contact"} onClick={() => scrollToSection("contact")}>Contact</NavLink>
           </nav>
 
-          {/* Premium CTA */}
-    
-<button
-  onClick={openDemo}
-  className="relative px-7 py-3 rounded-xl text-white text-sm font-medium bg-gradient-to-r from-indigo-500 to-purple-600 shadow-lg shadow-purple-700/30 hover:shadow-purple-700/60 transition-all overflow-hidden"
->
-  <span className="relative z-10">Book a Demo</span>
-  <span className="absolute inset-0 bg-white/10 opacity-0 hover:opacity-100 transition" />
-</button>
+          {/* CTA */}
+          <button
+            onClick={openDemo}
+            className="relative px-7 py-3 rounded-xl text-white text-sm font-medium bg-gradient-to-r from-indigo-500 to-purple-600 shadow-lg shadow-purple-700/30 hover:shadow-purple-700/60 transition-all overflow-hidden"
+          >
+            <span className="relative z-10">Book a Demo</span>
+            <span className="absolute inset-0 bg-white/10 opacity-0 hover:opacity-100 transition" />
+          </button>
 
           {/* Mobile Toggle */}
           <button className="md:hidden text-white" onClick={() => setOpen(!open)}>
@@ -137,12 +167,14 @@ export default function Navbar({ openDemo }: Props) {
             <MobileLink onClick={() => scrollToSection("home")}>Home</MobileLink>
             <MobileLink onClick={() => scrollToSection("how-it-works")}>How it works</MobileLink>
             <MobileLink onClick={() => scrollToSection("product")}>Features</MobileLink>
-            
             <MobileLink onClick={() => scrollToSection("platform")}>Platform</MobileLink>
             <MobileLink onClick={() => scrollToSection("faq")}>FAQs</MobileLink>
-            <MobileLink onClick={() => scrollToSection("footer")}>Contact</MobileLink>
+            <MobileLink onClick={() => scrollToSection("contact")}>Contact</MobileLink>
 
-            <button className="w-full mt-2 px-6 py-3 rounded-xl text-white bg-gradient-to-r from-indigo-500 to-purple-600 shadow-lg shadow-purple-700/30">
+            <button
+              onClick={openDemo}
+              className="w-full mt-2 px-6 py-3 rounded-xl text-white bg-gradient-to-r from-indigo-500 to-purple-600 shadow-lg shadow-purple-700/30"
+            >
               Book a Demo
             </button>
           </motion.div>
@@ -153,11 +185,21 @@ export default function Navbar({ openDemo }: Props) {
 }
 
 /* Desktop Link */
-function NavLink({ children, onClick, active }: { children: React.ReactNode; onClick: () => void; active: boolean }) {
+function NavLink({
+  children,
+  onClick,
+  active,
+}: {
+  children: React.ReactNode
+  onClick: () => void
+  active: boolean
+}) {
   return (
     <button
       onClick={onClick}
-      className="relative px-4 py-2 text-gray-300 hover:text-white transition"
+      className={`relative px-4 py-2 transition ${
+        active ? "text-white" : "text-gray-400 hover:text-white"
+      }`}
     >
       {active && (
         <motion.span
@@ -172,9 +214,18 @@ function NavLink({ children, onClick, active }: { children: React.ReactNode; onC
 }
 
 /* Mobile Link */
-function MobileLink({ children, onClick }: { children: React.ReactNode; onClick: () => void }) {
+function MobileLink({
+  children,
+  onClick,
+}: {
+  children: React.ReactNode
+  onClick: () => void
+}) {
   return (
-    <div onClick={onClick} className="text-base hover:text-white transition-colors cursor-pointer">
+    <div
+      onClick={onClick}
+      className="text-base hover:text-white transition-colors cursor-pointer"
+    >
       {children}
     </div>
   )

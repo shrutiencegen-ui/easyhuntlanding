@@ -1,122 +1,152 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Mail, Phone, ArrowUpRight } from "lucide-react";
 
-export default function Footer() {
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId)
-    if (element) element.scrollIntoView({ behavior: "smooth" })
-  }
+type Props = {
+  openDemo: () => void;
+};
+
+export default function Footer({ openDemo }: Props) {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleNavigation = (sectionId: string) => {
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) element.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    } else {
+      const element = document.getElementById(sectionId);
+      if (element) element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
-    <footer id="footer" className="bg-gray-900 text-foreground py-16">
-      <div className="max-w-7xl mx-auto px-8 md:px-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
-          {/* Brand */}
-          <div>
-            <h3 className="text-[18px] font-medium mb-6 text-foreground">
-              Easy Hunt
-            </h3>
-            <p className="text-body text-gray-300">
-              Search smarter. Not harder.
+    <footer className="relative bg-gradient-to-br from-[#0f0a1f] via-[#140a2a] to-[#1a0f35] text-white pt-24 pb-12 overflow-hidden">
+
+      {/* Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-purple-600/20 blur-[140px]" />
+
+      <div className="relative max-w-7xl mx-auto px-8 md:px-16">
+
+        {/* TOP */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-14 mb-16">
+
+          {/* Logo */}
+          <div className="flex flex-col gap-5">
+            <div className="flex items-center gap-4">
+              <img
+                src="/easyhunt-logo.png"
+                alt="Easy Hunt Logo"
+                className="h-20 w-auto"
+              />
+              <h3 className="text-2xl font-semibold">Easy Hunt</h3>
+            </div>
+
+            <p className="text-gray-400 max-w-sm">
+              Smart way to search Maharashtra property records. Save hours with fast and accurate results.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-[18px] font-medium mb-6 text-foreground">
-              Quick Links
-            </h4>
-
+            <h4 className="text-lg font-semibold mb-6">Quick Links</h4>
             <ul className="space-y-4">
-              <li>
-                <button
-                  onClick={() => scrollToSection("home")}
-                  className="text-body text-gray-300 hover:text-primary transition-colors"
-                >
-                  Home
-                </button>
-              </li>
 
-              <li>
-                <button
-                  onClick={() => scrollToSection("features")}
-                  className="text-body text-gray-300 hover:text-primary transition-colors"
-                >
-                  Features
-                </button>
-              </li>
-
-              <li>
-                <button
-                  onClick={() => scrollToSection("faq")}
-                  className="text-body text-gray-300 hover:text-primary transition-colors"
-                >
-                  FAQs
-                </button>
-              </li>
+              {[
+                { name: "Home", id: "home" },
+                { name: "Features", id: "how-it-works" },
+                { name: "FAQs", id: "faq" },
+              ].map((item, i) => (
+                <li key={i}>
+                  <button
+                    onClick={() => handleNavigation(item.id)}
+                    className="group flex items-center gap-2 text-gray-400 hover:text-white transition"
+                  >
+                    {item.name}
+                    <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition" />
+                  </button>
+                </li>
+              ))}
 
               <li>
                 <Link
                   to="/articles"
-                  className="text-body text-gray-300 hover:text-primary transition-colors"
+                  onClick={() => window.scrollTo(0, 0)} // 🔹 ensure page starts at top
+                  className="group flex items-center gap-2 text-gray-400 hover:text-white transition"
                 >
                   Articles
+                  <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition" />
                 </Link>
               </li>
+
+              {/* Contact moved to the end */}
+              <li>
+                <button
+                  onClick={() => handleNavigation("contact")}
+                  className="group flex items-center gap-2 text-gray-400 hover:text-white transition"
+                >
+                  Contact
+                  <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition" />
+                </button>
+              </li>
+
             </ul>
           </div>
 
           {/* Contact */}
           <div>
-            <h4 className="text-[18px] font-medium mb-6 text-foreground">
-              Contact
-            </h4>
+            <h4 className="text-lg font-semibold mb-6">Contact</h4>
+            <ul className="space-y-4 text-gray-400">
+              <li className="flex gap-3">
+                <Phone className="w-5 h-5 text-purple-400" />
+                <div>
+                  +91 7030555126 <br />
+                  +91 7030555120
+                </div>
+              </li>
 
-            <ul className="space-y-4">
-              <li>
-                <a
-                  href="mailto:easyhunt@encegenailabs.com"
-                  className="text-body text-gray-300 hover:text-primary transition-colors"
-                >
-                 Call us at :- +917030555126 <br />
-                   +917030555120 <br />
-
-                </a>
-                <a
-                  href="mailto:easyhunt@encegenailabs.com"
-                  className="text-body text-gray-300 hover:text-primary transition-colors"
-                >
-                  Email :- easyhunt@encegenailabs.com
-
+              <li className="flex gap-3">
+                <Mail className="w-5 h-5 text-purple-400" />
+                <a href="mailto:easyhunt@encegenailabs.com">
+                  easyhunt@encegenailabs.com
                 </a>
               </li>
 
               <li>
-                <a
-                  href="#contact"
-                  className="text-body text-gray-300 hover:text-primary transition-colors"
+                <button
+                  onClick={openDemo}
+                  className="mt-3 inline-flex items-center gap-2 text-sm px-5 py-2.5 rounded-lg bg-purple-600/30 hover:bg-purple-600 transition"
                 >
                   Request a Demo
-                </a>
+                  <ArrowUpRight className="w-4 h-4" />
+                </button>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row gap-4 items-center justify-between">
-          <p className="text-sm text-gray-400">
-            © {new Date().getFullYear()} Easy Hunt. All rights reserved.
+        {/* Bottom */}
+        <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+          <p>© {new Date().getFullYear()} EasyHunt. All rights reserved.</p>
+          <p>
+            Designed & Developed by{" "}
+            <a
+              href="https://www.encegenailabs.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-purple-400 hover:underline"
+            >
+              EncegenAI Labs
+            </a>
           </p>
-
-          <div className="flex gap-6 text-sm">
-            <Link to="#" className="text-gray-400 hover:text-white transition-colors">
-              Privacy Policy
-            </Link>
-            <Link to="#" className="text-gray-400 hover:text-white transition-colors">
-              Terms
-            </Link>
+          <div className="flex gap-6">
+            <Link to="#" className="hover:text-white">Privacy Policy</Link>
+            <Link to="#" className="hover:text-white">Terms</Link>
           </div>
         </div>
       </div>
     </footer>
-  )
+  );
 }
