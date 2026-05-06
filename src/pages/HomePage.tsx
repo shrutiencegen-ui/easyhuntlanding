@@ -27,7 +27,8 @@ useEffect(() => {
     const el = document.getElementById(location.state.scrollTo)
     el?.scrollIntoView({ behavior: "smooth" })
   }
-}, [location])
+}, [location]);
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       <HeroSection openDemo={openDemo} />
