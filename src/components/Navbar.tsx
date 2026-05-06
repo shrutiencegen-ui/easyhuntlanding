@@ -87,6 +87,7 @@ export default function Navbar({ openDemo }: Props) {
   /* ✅ Smooth navigation */
   const scrollToSection = (id: string) => {
     setOpen(false)
+    setActive(id)
 
     if (location.pathname !== "/") {
       navigate("/", { state: { scrollTo: id } })
@@ -115,7 +116,7 @@ export default function Navbar({ openDemo }: Props) {
             : "bg-[#0b0f25]/60 backdrop-blur-md"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-10 lg:px-16 h-[72px] flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 h-[72px] flex items-center justify-between gap-4">
 
           {/* ✅ LOGO FIXED */}
           <div
@@ -125,12 +126,15 @@ export default function Navbar({ openDemo }: Props) {
               <img
   src="/easyhunt-logo.png"
   alt="Easy Hunt Logo"
-  className="h-20 md:h-24 lg:h-28 w-auto object-contain"
+  className="h-10 sm:h-12 md:h-14 w-auto object-contain"
 />
+            <span className="hidden sm:block text-white font-semibold tracking-wide">
+              Easy Hunt
+            </span>
           </div>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8 text-[15px]">
+          <nav className="hidden md:flex items-center gap-4 lg:gap-8 text-[14px] lg:text-[15px]">
             <NavLink active={active === "home"} onClick={() => scrollToSection("home")}>Home</NavLink>
             <NavLink active={active === "how-it-works"} onClick={() => scrollToSection("how-it-works")}>How it works</NavLink>
             <NavLink active={active === "product"} onClick={() => scrollToSection("product")}>Features</NavLink>
@@ -142,7 +146,7 @@ export default function Navbar({ openDemo }: Props) {
           {/* CTA */}
           <button
             onClick={openDemo}
-            className="relative px-7 py-3 rounded-xl text-white text-sm font-medium bg-gradient-to-r from-indigo-500 to-purple-600 shadow-lg shadow-purple-700/30 hover:shadow-purple-700/60 transition-all overflow-hidden"
+            className="relative px-4 py-2.5 md:px-5 md:py-2.5 lg:px-7 lg:py-3 rounded-xl text-white text-sm font-medium bg-gradient-to-r from-indigo-500 to-purple-600 shadow-lg shadow-purple-700/30 hover:shadow-purple-700/60 transition-all overflow-hidden whitespace-nowrap"
           >
             <span className="relative z-10">Book a Demo</span>
             <span className="absolute inset-0 bg-white/10 opacity-0 hover:opacity-100 transition" />

@@ -56,7 +56,9 @@ export default function Footer({ openDemo }: Props) {
 
               {[
                 { name: "Home", id: "home" },
-                { name: "Features", id: "how-it-works" },
+                { name: "How it works", id: "how-it-works" },
+                { name: "Features", id: "product" },
+                { name: "Platform", id: "platform" },
                 { name: "FAQs", id: "faq" },
               ].map((item, i) => (
                 <li key={i}>

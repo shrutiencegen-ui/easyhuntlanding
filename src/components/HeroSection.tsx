@@ -52,9 +52,10 @@ const [demoOpen, setDemoOpen] = useState(false);
   }, []);
 
   return (
-    <section id="home"
+    <section
+      id="home"
       ref={sectionRef}
-      className="relative h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 md:pt-28"
     >
       {/* 🌌 Animated Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0a0d1a]">
@@ -88,7 +89,7 @@ const [demoOpen, setDemoOpen] = useState(false);
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 px-6 py-3 glass-card mb-10 rounded-full mt-[30px]"
+          className="inline-flex items-center gap-2 px-6 py-3 glass-card mb-10 rounded-full"
 
         >
           <motion.div
@@ -143,7 +144,7 @@ const [demoOpen, setDemoOpen] = useState(false);
               animate={{ rotate: 360 }}
               transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
             >
-              <Sparkles className="w-4 h-4 text-primary" />
+              <Sparkles className="w-4 h-4 text-white/90" />
             </motion.div>
           </Button>
 

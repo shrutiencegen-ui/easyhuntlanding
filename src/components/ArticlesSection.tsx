@@ -47,21 +47,21 @@ export default function ArticlesSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <Card className="overflow-hidden glass-card glass-card-hover h-full preserve-3d">
+              <Card className="overflow-hidden glass-card glass-card-hover h-full preserve-3d flex flex-col">
                 <img
                   src={article.image}
                   alt={article.title}
                   className="w-full h-64 object-cover"
                   loading="lazy"
                 />
-                <div className="p-8">
+                <div className="p-8 flex-1 flex flex-col">
                   <h3 className="text-h3 font-medium mb-4 text-foreground">
                     {article.title}
                   </h3>
-                  <p className="text-body text-gray-300 mb-6">
+                  <p className="text-body text-gray-300 mb-6 line-clamp-3">
                     {article.excerpt}
                   </p>
-                  <motion.div whileHover={{ x: 5 }}>
+                  <motion.div whileHover={{ x: 5 }} className="mt-auto">
                     <Button variant="ghost" size="sm" className="gap-2">
                       Read More <ArrowRight className="w-4 h-4" />
                     </Button>
@@ -73,11 +73,15 @@ export default function ArticlesSection() {
         </div>
 
         <div className="text-center">
-          <Link to="https://encegen-portfolio.vercel.app">
+          <a
+            href="https://encegen-portfolio.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Button size="lg" variant="outline">
               View All Articles <ArrowRight className="w-4 h-4" />
             </Button>
-          </Link>
+          </a>
         </div>
       </div>
     </section>

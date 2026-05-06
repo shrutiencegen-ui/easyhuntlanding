@@ -36,7 +36,7 @@ export default function FeaturesSection() {
     >
       <div className="text-center mb-16">
        <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight mb-6 text-white">
-              <span className="text-gradient-1"> How It's Work</span>
+              <span className="text-gradient-1">How it works</span>
             </h2>
         <p className="text-gray-400 mt-3 text-sm md:text-base">
           Powerful features to simplify your document search

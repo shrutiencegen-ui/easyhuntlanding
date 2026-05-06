@@ -1,6 +1,4 @@
-import { useEffect } from "react"
 import { Link } from "react-router-dom"
-import Navbar from "../components/Navbar"
 import { Card } from "@/components/ui/card"
 import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -12,11 +10,6 @@ export default function ArticlesPage() {
   useLayoutEffect(() => {
   window.scrollTo(0, 0);
 }, []);
-
-
-  const handleOpenDemo = () => {
-    console.log("Demo opened")
-  }
 
   const articles = [
     {
@@ -36,8 +29,6 @@ export default function ArticlesPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Navbar openDemo={handleOpenDemo} />
-
       <main className="pt-24 md:pt-32 pb-16">
         <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-10 lg:px-16">
           

@@ -5,8 +5,8 @@ import ArticlesPage from "./pages/ArticlesPage";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ShowcasePage from "./components/ShowcaseSection";
-import DemoModal from "./components/DemoModal";
 import ScrollToTop from "./components/ScrollToTop";
+import DemoModal from "./components/DemoModal";
 export default function App() {
 
   // GLOBAL modal state
@@ -31,7 +31,6 @@ export default function App() {
       </Routes>
 
     <Footer openDemo={openDemo} />
-<DemoModal isOpen={demoOpen} onClose={() => setDemoOpen(false)} />
       {/* GLOBAL MODAL (VERY IMPORTANT) */}
       <DemoModal isOpen={demoOpen} onClose={closeDemo} />
 
