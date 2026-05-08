@@ -119,19 +119,18 @@ export default function Navbar({ openDemo }: Props) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 h-[72px] flex items-center justify-between gap-4">
 
           {/* ✅ LOGO FIXED */}
-          <div
-            onClick={() => scrollToSection("home")}
-            className="flex items-center gap-3 cursor-pointer select-none"
-          >
-              <img
-  src="/easyhunt-logo.png"
+  <div
+  onClick={() => scrollToSection("home")}
+  className="flex items-center gap-1 cursor-pointer select-none"
+>
+ <img
+  src="/logo.png"
   alt="Easy Hunt Logo"
-  className="h-10 sm:h-12 md:h-14 w-auto object-contain"
+  className="h-12 sm:h-14 md:h-16 w-auto object-contain"
 />
-            <span className="hidden sm:block text-white font-semibold tracking-wide">
-              Easy Hunt
-            </span>
-          </div>
+
+
+</div>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-4 lg:gap-8 text-[14px] lg:text-[15px]">

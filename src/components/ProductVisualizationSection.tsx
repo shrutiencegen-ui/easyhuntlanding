@@ -2,6 +2,11 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import OrbitAnimation from "./OrbitAnimation";
 import { ArrowRight } from "lucide-react";
+import {
+  Search,
+  ShieldCheck,
+  FileSpreadsheet,
+} from "lucide-react";
 
 export default function ProductVisualizationSection() {
   return (
@@ -22,9 +27,9 @@ export default function ProductVisualizationSection() {
             transition={{ duration: 0.6 }}
           >
             {/* pill */}
-            <div className="inline-flex items-center gap-2 px-6 py-3 glass-card mb-6 rounded-full">
-              <span className="text-sm text-primary font-medium">Features</span>
-            </div>
+             <span className="inline-flex px-4 py-2 mb-4 text-sm rounded-full border border-blue-500/30 text-blue-400">
+            ⚡ Features
+          </span>
 
             <h2 className="text-h2 md:text-5xl font-medium mb-6 text-foreground">
               Stay on top of your <br /> property research
@@ -35,30 +40,44 @@ export default function ProductVisualizationSection() {
 
             </p>
 
-            {/* bullets */}
-            <div className="space-y-6 mb-12">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center">
-                  📈
-                </div>
-                <p className="text-gray-300">Intelligent keyword search</p>
-              </div>
 
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center">
-                  📊
-                </div>
-                <p className="text-gray-300">Structured property records</p>
-              </div>
 
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center">
-                  ⚡
-                </div>
-                <p className="text-gray-300">Fast verification process</p>
-              </div>
-            </div>
+<div className="space-y-6 mb-12">
 
+  {/* Feature 1 */}
+  <div className="flex items-center gap-4 group">
+    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-[0_0_25px_rgba(251,191,36,0.35)] transition-all duration-300 group-hover:scale-105">
+      <Search className="w-6 h-6 text-white" strokeWidth={2.2} />
+    </div>
+
+    <p className="text-gray-200 text-lg">
+      Deep keyword search capability
+    </p>
+  </div>
+
+  {/* Feature 2 */}
+  <div className="flex items-center gap-4 group">
+    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center shadow-[0_0_25px_rgba(34,197,94,0.35)] transition-all duration-300 group-hover:scale-105">
+      <ShieldCheck className="w-6 h-6 text-white" strokeWidth={2.2} />
+    </div>
+
+    <p className="text-gray-200 text-lg">
+      Secure data processing
+    </p>
+  </div>
+
+  {/* Feature 3 */}
+  <div className="flex items-center gap-4 group">
+    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center shadow-[0_0_25px_rgba(59,130,246,0.35)] transition-all duration-300 group-hover:scale-105">
+      <FileSpreadsheet className="w-6 h-6 text-white" strokeWidth={2.2} />
+    </div>
+
+    <p className="text-gray-200 text-lg">
+      Export to PDF or Excel
+    </p>
+  </div>
+
+</div>
             <Button size="lg" variant="default" className="px-10">
               Learn More
               <ArrowRight className="w-5 h-5 text-purple-400 group-hover:text-white transition-all duration-300 group-hover:translate-x-1" />
