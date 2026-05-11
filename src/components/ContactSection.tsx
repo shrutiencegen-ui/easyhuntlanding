@@ -80,7 +80,7 @@ export default function ContactSection() {
             <div className="icon"><Phone size={18} /></div>
             <div>
               <h4>Phone</h4>
-              <p>+91 7030555120</p>
+              <p>+91 7030555126</p>
             </div>
           </div>
 

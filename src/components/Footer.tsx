@@ -113,7 +113,8 @@ export default function Footer({ openDemo }: Props) {
               <li className="flex gap-3">
                 <Phone className="w-5 h-5 text-purple-400" />
                 <div>
-                  +91 7030555126 <br />
+                  +91  7030555126 <br />
+                  +91 7030555123   <br />
                   +91 7030555120
                 </div>
               </li>

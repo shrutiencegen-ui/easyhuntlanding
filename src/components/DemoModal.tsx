@@ -99,10 +99,7 @@ export default function DemoModal({ isOpen, onClose }: Props) {
             />
           </div>
 
-          <div className="demo-row">
-            <label>Available Time Slot</label>
-            <input type="datetime-local" />
-          </div>
+         
 
           <button type="submit" className="demo-submit">
             Schedule Demo
