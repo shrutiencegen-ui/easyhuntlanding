@@ -1,150 +1,628 @@
 import { useState, useRef } from "react";
 import { Mail, Phone, Send } from "lucide-react";
 import emailjs from "@emailjs/browser";
-import toast, { Toaster } from "react-hot-toast";
+import toast  from "react-hot-toast";
+
 import "./contact.css";
 
+type Errors = {
+  user_name?: string;
+  user_email?: string;
+  user_phone?: string;
+  message?: string;
+};
+
 export default function ContactSection() {
-  const formRef = useRef<HTMLFormElement | null>(null);
-  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const formRef =
+    useRef<HTMLFormElement | null>(
+      null
+    );
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const [errors, setErrors] =
+    useState<Errors>({});
+
+  /* =========================
+     VALIDATION
+  ========================= */
+
+  const validateField = (
+    name: string,
+    value: string
+  ) => {
+
+    let error = "";
+
+    const trimmedValue =
+      value.trim();
+
+    switch (name) {
+
+      /* =========================
+         NAME
+      ========================= */
+
+      case "user_name":
+
+        if (!trimmedValue) {
+
+          error =
+            "Name is required";
+        }
+
+        else if (
+          trimmedValue.length > 32
+        ) {
+
+          error =
+            "Maximum 32 characters allowed";
+        }
+
+        else if (
+          !/^[A-Za-z]+(?:\s[A-Za-z]+)*$/.test(
+            trimmedValue
+          )
+        ) {
+
+          error =
+            "Numbers & Special characters not supported";
+        }
+
+      break;
+
+      /* =========================
+         EMAIL
+      ========================= */
+
+      case "user_email":
+
+        if (!trimmedValue) {
+
+          error =
+            "Email is required";
+        }
+
+        else if (
+          trimmedValue.length > 60
+        ) {
+
+          error =
+            "Maximum 60 characters allowed";
+        }
+
+        else if (
+          !/^\S+@\S+\.\S+$/.test(
+            trimmedValue
+          )
+        ) {
+
+          error =
+            "Enter valid email";
+        }
+
+      break;
+
+      /* =========================
+         PHONE
+      ========================= */
+
+      case "user_phone":
+
+        if (!trimmedValue) {
+
+          error =
+            "Phone number is required";
+        }
+
+        else if (
+          !/^\d+$/.test(
+            trimmedValue
+          )
+        ) {
+
+          error =
+            "Only numbers allowed";
+        }
+
+        else if (
+          trimmedValue.length !== 10
+        ) {
+
+          error =
+            "Enter valid 10 digit number";
+        }
+
+      break;
+
+      /* =========================
+         MESSAGE
+      ========================= */
+
+      case "message":
+
+        if (!trimmedValue) {
+
+          error =
+            "Message is required";
+        }
+
+        else if (
+          trimmedValue.length > 500
+        ) {
+
+          error =
+            "Maximum 500 characters allowed";
+        }
+
+      break;
+    }
+
+    return error;
+  };
+
+  /* =========================
+     HANDLE CHANGE
+  ========================= */
+
+  const handleChange = (
+    e:
+      React.ChangeEvent<
+        HTMLInputElement |
+        HTMLTextAreaElement
+      >
+  ) => {
+
+    const {
+      name,
+      value
+    } = e.target;
+
+    let cleanedValue = value;
+
+    /* =========================
+       NAME
+    ========================= */
+
+    if (
+      name === "user_name"
+    ) {
+
+      cleanedValue =
+        value.replace(
+          /^\s+/,
+          ""
+        );
+
+      if (
+        !/^[A-Za-z\s]*$/.test(
+          cleanedValue
+        )
+      ) {
+
+        setErrors(prev => ({
+          ...prev,
+          user_name:
+            "Special characters not supported",
+        }));
+
+        return;
+      }
+    }
+
+    /* =========================
+       PHONE
+    ========================= */
+
+    if (
+      name === "user_phone"
+    ) {
+
+      cleanedValue =
+        value.replace(
+          /\D/g,
+          ""
+        );
+    }
+
+    /* =========================
+       MESSAGE LIMIT
+    ========================= */
+
+    if (
+      name === "message" &&
+      cleanedValue.length > 500
+    ) {
+
+      setErrors(prev => ({
+        ...prev,
+        message:
+          "Maximum 500 characters allowed",
+      }));
+
+      return;
+    }
+
+    /* =========================
+       UPDATE FIELD
+    ========================= */
+
+    e.target.value =
+      cleanedValue;
+
+    setErrors(prev => ({
+      ...prev,
+      [name]:
+        validateField(
+          name,
+          cleanedValue
+        ),
+    }));
+  };
+
+  /* =========================
+     SUBMIT
+  ========================= */
+
+  const handleSubmit = async (
+    e:
+      React.FormEvent<
+        HTMLFormElement
+      >
+  ) => {
+
     e.preventDefault();
-    setLoading(true);
 
-    const form = formRef.current;
+    if (loading) return;
+
+    const form =
+      formRef.current;
+
     if (!form) return;
 
-    // 1. FORM DATA
-    const formData = new FormData(form);
-    const name = formData.get("user_name")?.toString().trim();
-    const email = formData.get("user_email")?.toString().trim();
-    const phone = formData.get("user_phone")?.toString().trim();
-    const message = formData.get("message")?.toString().trim();
+    const formData =
+      new FormData(form);
 
-    // 2. VALIDATIONS
-    if (!name || !email || !phone || !message) {
-      toast.error("All fields are required! ❌");
-      setLoading(false);
-      return;
-    }
+    const fields = {
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      toast.error("Please enter a valid email address! 📧");
-      setLoading(false);
-      return;
-    }
+      user_name:
+        formData
+          .get("user_name")
+          ?.toString() || "",
 
-    const phoneDigits = phone.replace(/\D/g, "");
-    if (phoneDigits.length !== 10) {
-      toast.error("Phone number must be exactly 10 digits! 📞");
-      setLoading(false);
-      return;
-    }
+      user_email:
+        formData
+          .get("user_email")
+          ?.toString() || "",
 
-    // 3. EMAILJS
-    emailjs
-      .sendForm(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-        form,
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-      )
-      .then(
-        () => {
-          toast.success("Message sent successfully! 🚀");
-          form.reset(); // ✅ safe
-        },
-        (error) => {
-          console.error("FAILED...", error.text);
-          toast.error("Something went wrong. Check console.");
+      user_phone:
+        formData
+          .get("user_phone")
+          ?.toString() || "",
+
+      message:
+        formData
+          .get("message")
+          ?.toString() || "",
+    };
+
+    /* =========================
+       VALIDATE ALL
+    ========================= */
+
+    const newErrors: Errors =
+      {};
+
+    Object.entries(fields).forEach(
+      ([key, value]) => {
+
+        const error =
+          validateField(
+            key,
+            value
+          );
+
+        if (error) {
+
+          newErrors[
+            key as keyof Errors
+          ] = error;
         }
-      )
-      .finally(() => setLoading(false));
+      }
+    );
+
+    setErrors(newErrors);
+
+    if (
+      Object.keys(newErrors)
+        .length > 0
+    ) {
+
+      toast.error(
+        "Please fill all fields correctly ❌"
+      );
+
+      return;
+    }
+
+    /* =========================
+       EMAILJS
+    ========================= */
+
+    try {
+
+      setLoading(true);
+
+      await emailjs.sendForm(
+
+        import.meta.env
+          .VITE_EMAILJS_SERVICE_ID,
+
+        import.meta.env
+          .VITE_EMAILJS_CONTACT_TEMPLATE_ID,
+
+        form,
+
+        import.meta.env
+          .VITE_EMAILJS_PUBLIC_KEY
+      );
+
+      toast.success(
+        "Message sent successfully 🚀"
+      );
+
+      /* RESET */
+
+      form.reset();
+
+      setErrors({});
+
+    } catch (error) {
+
+      console.error(
+        "FAILED...",
+        error
+      );
+
+      toast.error(
+        "Failed to send message ❌"
+      );
+
+    } finally {
+
+      setLoading(false);
+    }
   };
 
   return (
-    <section id="contact" className="contact-section">
-      <Toaster position="top-center" containerStyle={{ zIndex: 99999 }} />
+
+    <section
+      id="contact"
+      className="contact-section"
+    >
+
 
       <div className="contact-wrapper">
-        {/* LEFT SIDE */}
+
+        {/* LEFT */}
+
         <div className="contact-info">
-          <h2>Get in Touch</h2>
+
+          <h2>
+            Get in Touch
+          </h2>
+
           <p className="contact-sub">
-            We’d love to hear from you. Reach out for support, demos, or any questions.
+
+            We’d love to hear from you.
+            Reach out for support,
+            demos, or any questions.
+
           </p>
 
-          <div className="info-item">
-            <div className="icon"><Phone size={18} /></div>
-            <div>
-              <h4>Phone</h4>
-              <p>+91 7030555126</p>
-            </div>
-          </div>
+          {/* PHONE */}
 
           <div className="info-item">
-            <div className="icon"><Mail size={18} /></div>
-            <div>
-              <h4>Email</h4>
-              <p>easyhunt@encegenailabs.com</p>
+
+            <div className="icon">
+
+              <Phone size={18} />
+
             </div>
+
+            <div>
+
+              <h4>
+                Phone
+              </h4>
+
+              <p>
+                +91 7030555126
+              </p>
+
+            </div>
+
           </div>
+
+          {/* EMAIL */}
+
+          <div className="info-item">
+
+            <div className="icon">
+
+              <Mail size={18} />
+
+            </div>
+
+            <div>
+
+              <h4>
+                Email
+              </h4>
+
+              <p>
+                easyhunt@encegenailabs.com
+              </p>
+
+            </div>
+
+          </div>
+
         </div>
 
-        {/* RIGHT SIDE */}
-        <form ref={formRef} onSubmit={handleSubmit} className="contact-form">
+        {/* FORM */}
+
+        <form
+          ref={formRef}
+          onSubmit={handleSubmit}
+          className="contact-form"
+        >
+
+          {/* NAME */}
+
           <div className="form-row">
-            <label>Full Name *</label>
+
+            <label>
+              Full Name *
+            </label>
+
             <input
               name="user_name"
               type="text"
+              maxLength={40}
               placeholder="Enter your full name"
-              required
+              onChange={
+                handleChange
+              }
             />
+
+            {errors.user_name && (
+
+              <span className="error">
+                {errors.user_name}
+              </span>
+            )}
+
           </div>
 
+          {/* EMAIL */}
+
           <div className="form-row">
-            <label>Email Address *</label>
+
+            <label>
+              Email Address *
+            </label>
+
             <input
               name="user_email"
               type="email"
+              maxLength={60}
               placeholder="your.email@example.com"
-              required
+              onChange={
+                handleChange
+              }
             />
+
+            {errors.user_email && (
+
+              <span className="error">
+                {errors.user_email}
+              </span>
+            )}
+
           </div>
 
+          {/* PHONE */}
+
           <div className="form-row">
-            <label>Phone Number *</label>
+
+            <label>
+              Phone Number *
+            </label>
+
             <input
               name="user_phone"
               type="tel"
+              maxLength={10}
+              inputMode="numeric"
               placeholder="10 digit number"
-              required
+              onChange={
+                handleChange
+              }
             />
-          </div>
 
-          <div className="form-row">
-            <label>Message *</label>
-            <textarea
-              name="message"
-              placeholder="Tell us about your requirements..."
-              required
-            />
-          </div>
+            {errors.user_phone && (
 
-          <button type="submit" className="send-btn" disabled={loading}>
-            {loading ? (
-              <span className="flex items-center gap-2">Sending...</span>
-            ) : (
-              <span className="flex items-center gap-2">
-                Send Message <Send size={16} />
+              <span className="error">
+                {errors.user_phone}
               </span>
             )}
+
+          </div>
+
+          {/* MESSAGE */}
+
+          <div className="form-row">
+
+            <label>
+              Message *
+            </label>
+
+            <textarea
+              name="message"
+              maxLength={500}
+              placeholder="Tell us about your requirements..."
+              onChange={
+                handleChange
+              }
+            />
+
+            {errors.message && (
+
+              <span className="error">
+                {errors.message}
+              </span>
+            )}
+
+          </div>
+
+          {/* BUTTON */}
+
+          <button
+            type="submit"
+            className={`send-btn ${
+              loading
+                ? "disabled-btn"
+                : ""
+            }`}
+            disabled={loading}
+          >
+
+            {loading ? (
+
+              <span className="flex items-center gap-2">
+                Sending...
+              </span>
+
+            ) : (
+
+              <span className="flex items-center gap-2">
+
+                Send Message
+
+                <Send size={16} />
+
+              </span>
+            )}
+
           </button>
+
         </form>
+
       </div>
+
     </section>
   );
 }

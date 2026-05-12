@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import DatePicker from "react-datepicker";
+import emailjs from "@emailjs/browser";
+import toast from "react-hot-toast";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "./demoModal.css";
@@ -30,22 +32,26 @@ type Errors = {
   time?: string;
 };
 
+const initialFormData: FormData = {
+  name: "",
+  countryCode: "+91",
+  contact: "",
+  email: "",
+  company: "",
+  date: null,
+  time: null,
+  duration: 60,
+};
+
 export default function DemoModal({
   isOpen,
   onClose,
 }: Props) {
 
   const [formData, setFormData] =
-    useState<FormData>({
-      name: "",
-      countryCode: "+91",
-      contact: "",
-      email: "",
-      company: "",
-      date: null,
-      time: null,
-      duration: 60,
-    });
+    useState<FormData>(
+      initialFormData
+    );
 
   const [errors, setErrors] =
     useState<Errors>({});
@@ -57,124 +63,31 @@ export default function DemoModal({
      VALIDATION
   ========================= */
 
-  /* =========================
-   VALIDATION
-========================= */
+  const validateField = (
+    name: keyof FormData,
+    value: any
+  ) => {
 
-const validateField = (
-  name: keyof FormData,
-  value: any
-) => {
+    let error = "";
 
-  let error = "";
+    const trimmedValue =
+      typeof value === "string"
+        ? value.trim()
+        : value;
 
-  // SAFE TRIM
-  const trimmedValue =
-    typeof value === "string"
-      ? value.trim()
-      : value;
+    switch (name) {
 
-  switch (name) {
+      /* NAME */
 
-    /* =========================
-       NAME
-    ========================= */
+      case "name":
 
-    case "name":
+        if (!trimmedValue) {
 
-      // empty OR only spaces
-      if (!trimmedValue) {
+          error = "Name is required";
 
-        error = "Name is required";
+        }
 
-      }
-
-      // max 32 chars
-      else if (
-        trimmedValue.length > 32
-      ) {
-
-        error =
-          "Maximum 32 characters allowed";
-      }
-
-      // only alphabets + single spaces
-      else if (
-        !/^[A-Za-z]+(?:\s[A-Za-z]+)*$/.test(
-          trimmedValue
-        )
-      ) {
-
-        error =
-          "Numbers and Special characters not supported";
-      }
-
-    break;
-
-    /* =========================
-       CONTACT
-    ========================= */
-
-    case "contact":
-
-      if (!trimmedValue) {
-
-        error = "Contact is required";
-
-      }
-
-      else if (
-        !/^\d+$/.test(trimmedValue)
-      ) {
-
-        error = "Only numbers allowed";
-
-      }
-
-      else if (
-        trimmedValue.length !== 10
-      ) {
-
-        error =
-          "Enter valid 10 digit number";
-      }
-
-    break;
-
-    /* =========================
-       EMAIL
-    ========================= */
-
-    case "email":
-
-      if (!trimmedValue) {
-
-        error = "Email is required";
-
-      }
-
-      else if (
-        !/^\S+@\S+\.\S+$/.test(
-          trimmedValue
-        )
-      ) {
-
-        error = "Enter valid email";
-      }
-
-    break;
-
-    /* =========================
-       COMPANY
-    ========================= */
-
-    case "company":
-
-      // only if entered
-      if (trimmedValue) {
-
-        // max 32 chars
-        if (
+        else if (
           trimmedValue.length > 32
         ) {
 
@@ -182,49 +95,121 @@ const validateField = (
             "Maximum 32 characters allowed";
         }
 
-        // special chars not allowed
         else if (
-          !/^[A-Za-z0-9]+(?:\s[A-Za-z0-9]+)*$/.test(
+          !/^[A-Za-z]+(?:\s[A-Za-z]+)*$/.test(
             trimmedValue
           )
         ) {
 
           error =
-            "Numbers, Special characters not supported";
+            "Special characters not supported";
         }
-      }
 
-    break;
+      break;
 
-    /* =========================
-       DATE
-    ========================= */
+      /* CONTACT */
 
-    case "date":
+      case "contact":
 
-      if (!value) {
+        if (!trimmedValue) {
 
-        error = "Select date";
-      }
+          error = "Contact is required";
 
-    break;
+        }
 
-    /* =========================
-       TIME
-    ========================= */
+        else if (
+          !/^\d+$/.test(trimmedValue)
+        ) {
 
-    case "time":
+          error =
+            "Only numbers allowed";
 
-      if (!value) {
+        }
 
-        error = "Select time";
-      }
+        else if (
+          trimmedValue.length !== 10
+        ) {
 
-    break;
-  }
+          error =
+            "Enter valid 10 digit number";
+        }
 
-  return error;
-};
+      break;
+
+      /* EMAIL */
+
+      case "email":
+
+        if (!trimmedValue) {
+
+          error = "Email is required";
+
+        }
+
+        else if (
+          !/^\S+@\S+\.\S+$/.test(
+            trimmedValue
+          )
+        ) {
+
+          error =
+            "Enter valid email";
+        }
+
+      break;
+
+      /* COMPANY */
+
+      case "company":
+
+        if (trimmedValue) {
+
+          if (
+            trimmedValue.length > 32
+          ) {
+
+            error =
+              "Maximum 32 characters allowed";
+          }
+
+          else if (
+            !/^[A-Za-z0-9]+(?:\s[A-Za-z0-9]+)*$/.test(
+              trimmedValue
+            )
+          ) {
+
+            error =
+              "Special characters not supported";
+          }
+        }
+
+      break;
+
+      /* DATE */
+
+      case "date":
+
+        if (!value) {
+
+          error = "Select date";
+        }
+
+      break;
+
+      /* TIME */
+
+      case "time":
+
+        if (!value) {
+
+          error = "Select time";
+        }
+
+      break;
+    }
+
+    return error;
+  };
 
   /* =========================
      HANDLE INPUTS
@@ -232,13 +217,14 @@ const validateField = (
 
   const handleChange = (
     e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement
+      HTMLInputElement |
+      HTMLSelectElement
     >
   ) => {
 
-    const { name, value } = e.target;
+    const { name, value } =
+      e.target;
 
-    // remove starting spaces
     const cleanedValue =
       value.startsWith(" ")
         ? value.trimStart()
@@ -246,7 +232,10 @@ const validateField = (
 
     setFormData(prev => ({
       ...prev,
-      [name]: cleanedValue,
+      [name]:
+        name === "duration"
+          ? Number(cleanedValue)
+          : cleanedValue,
     }));
 
     setErrors(prev => ({
@@ -351,17 +340,21 @@ const validateField = (
 
     e.preventDefault();
 
+    // prevent multiple submits
+    if (submitting) return;
+
     const newErrors: Errors = {};
 
     Object.keys(formData).forEach(
       (key) => {
 
-        const error = validateField(
-          key as keyof FormData,
-          formData[
-            key as keyof FormData
-          ]
-        );
+        const error =
+          validateField(
+            key as keyof FormData,
+            formData[
+              key as keyof FormData
+            ]
+          );
 
         if (error) {
 
@@ -375,22 +368,123 @@ const validateField = (
     setErrors(newErrors);
 
     if (
-      Object.keys(newErrors).length > 0
+      Object.keys(newErrors)
+        .length > 0
     ) {
+
+      toast.error(
+        "Please fill all required fields correctly"
+      );
+
       return;
     }
 
-    setSubmitting(true);
+    try {
 
-    setTimeout(() => {
+      setSubmitting(true);
 
-      console.log(formData);
+      const templateParams = {
+
+        /* CUSTOMER DETAILS */
+
+        name:
+          formData.name || "N/A",
+
+        countryCode:
+          formData.countryCode || "",
+
+        contact:
+          formData.contact || "N/A",
+
+        email:
+          formData.email || "N/A",
+
+        company:
+          formData.company || "N/A",
+
+        /* DEMO DETAILS */
+
+        date:
+          formData.date
+            ?.toLocaleDateString(
+              "en-IN",
+              {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              }
+            ) || "N/A",
+
+        time:
+          formatTime(
+            formData.time
+          ) || "N/A",
+
+        duration:
+          `${formData.duration} Minutes`,
+
+        slot:
+          `${formatTime(
+            formData.time
+          )} to ${calculateEndTime()}`
+      };
+
+      await emailjs.send(
+
+        import.meta.env
+          .VITE_EMAILJS_SERVICE_ID,
+
+        import.meta.env
+          .VITE_EMAILJS_TEMPLATE_ID,
+
+        templateParams,
+
+        import.meta.env
+          .VITE_EMAILJS_PUBLIC_KEY
+      );
+
+      toast.success(
+        "Demo scheduled successfully 🚀"
+      );
+
+      console.log(
+        "EMAIL SENT",
+        templateParams
+      );
+
+      // RESET FORM
+
+      setFormData(
+        initialFormData
+      );
+
+      // RESET ERRORS
+
+      setErrors({});
+
+      // CLOSE MODAL
+
+      setTimeout(() => {
+
+        onClose();
+
+      }, 1200);
+
+    } catch (error) {
+
+      console.error(
+        "EMAIL ERROR",
+        error
+      );
+
+      toast.error(
+        "Failed to schedule demo"
+      );
+
+    } finally {
 
       setSubmitting(false);
-
-      onClose();
-
-    }, 1500);
+    }
   };
 
   /* =========================
@@ -444,8 +538,7 @@ const validateField = (
         </h2>
 
         <p className="demo-sub">
-          Schedule your live product
-          walkthrough
+          Schedule your live product walkthrough
         </p>
 
         {/* FORM */}
@@ -463,66 +556,57 @@ const validateField = (
               Name *
             </label>
 
-           {/* NAME INPUT */}
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              maxLength={40}
+              placeholder="Enter name"
+              onChange={(e) => {
 
-<input
-  type="text"
-  name="name"
-  value={formData.name}
-  maxLength={40}
-  placeholder="Enter name"
-  onChange={(e) => {
+                let value =
+                  e.target.value.replace(
+                    /^\s+/,
+                    ""
+                  );
 
-    // remove starting spaces
-    let value =
-      e.target.value.replace(/^\s+/, "");
+                if (
+                  !/^[A-Za-z\s]*$/.test(
+                    value
+                  )
+                ) {
 
-    // allow only letters + spaces
-    if (!/^[A-Za-z\s]*$/.test(value)) {
+                  setErrors(prev => ({
+                    ...prev,
+                    name:
+                      "Special characters not supported",
+                  }));
 
-      setErrors(prev => ({
-        ...prev,
-        name:
-          "Special characters not supported",
-      }));
+                  return;
+                }
 
-      return;
-    }
+                setFormData(prev => ({
+                  ...prev,
+                  name: value,
+                }));
 
-    // show error after 32 chars
-    if (value.trim().length > 32) {
+                setErrors(prev => ({
+                  ...prev,
+                  name:
+                    validateField(
+                      "name",
+                      value
+                    ),
+                }));
+              }}
+            />
 
-      setErrors(prev => ({
-        ...prev,
-        name:
-          "Maximum 32 characters allowed",
-      }));
+            {errors.name && (
 
-    } else {
-
-      setErrors(prev => ({
-        ...prev,
-        name: validateField(
-          "name",
-          value
-        ),
-      }));
-    }
-
-    setFormData(prev => ({
-      ...prev,
-      name: value,
-    }));
-  }}
-/>
-
-{errors.name && (
-  <span className="error">
-    {errors.name}
-  </span>
-)}
-
-        
+              <span className="error">
+                {errors.name}
+              </span>
+            )}
 
           </div>
 
@@ -566,7 +650,6 @@ const validateField = (
                 placeholder="9876543210"
                 maxLength={10}
                 inputMode="numeric"
-
                 onChange={(e) => {
 
                   const onlyNumbers =
@@ -634,69 +717,59 @@ const validateField = (
 
             <label>
               Company
-     
             </label>
-            {/* COMPANY INPUT */}
 
-<input
-  type="text"
-  name="company"
-  value={formData.company}
-  maxLength={40}
-  placeholder="Company name"
-  onChange={(e) => {
+            <input
+              type="text"
+              name="company"
+              value={formData.company}
+              maxLength={40}
+              placeholder="Company name"
+              onChange={(e) => {
 
-    // remove starting spaces
-    let value =
-      e.target.value.replace(/^\s+/, "");
+                let value =
+                  e.target.value.replace(
+                    /^\s+/,
+                    ""
+                  );
 
-    // allow only letters numbers spaces
-    if (
-      !/^[A-Za-z0-9\s]*$/.test(value)
-    ) {
+                if (
+                  !/^[A-Za-z0-9\s]*$/.test(
+                    value
+                  )
+                ) {
 
-      setErrors(prev => ({
-        ...prev,
-        company:
-          "Special characters not supported",
-      }));
+                  setErrors(prev => ({
+                    ...prev,
+                    company:
+                      "Special characters not supported",
+                  }));
 
-      return;
-    }
+                  return;
+                }
 
-    // show error after 32 chars
-    if (value.trim().length > 32) {
+                setFormData(prev => ({
+                  ...prev,
+                  company: value,
+                }));
 
-      setErrors(prev => ({
-        ...prev,
-        company:
-          "Maximum 32 characters allowed",
-      }));
+                setErrors(prev => ({
+                  ...prev,
+                  company:
+                    validateField(
+                      "company",
+                      value
+                    ),
+                }));
+              }}
+            />
 
-    } else {
+            {errors.company && (
 
-      setErrors(prev => ({
-        ...prev,
-        company: validateField(
-          "company",
-          value
-        ),
-      }));
-    }
-
-    setFormData(prev => ({
-      ...prev,
-      company: value,
-    }));
-  }}
-/>
-
-{errors.company && (
-  <span className="error">
-    {errors.company}
-  </span>
-)}
-          
+              <span className="error">
+                {errors.company}
+              </span>
+            )}
 
           </div>
 
@@ -827,7 +900,11 @@ const validateField = (
 
           <button
             type="submit"
-            className="demo-submit"
+            className={`demo-submit ${
+              submitting
+                ? "disabled-btn"
+                : ""
+            }`}
             disabled={submitting}
           >
 

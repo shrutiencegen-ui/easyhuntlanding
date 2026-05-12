@@ -1,24 +1,43 @@
 /* =========================
+   RESET
+========================= */
+
+*{
+  box-sizing: border-box;
+}
+
+html,
+body{
+  margin: 0;
+  padding: 0;
+}
+
+/* =========================
    BACKDROP
 ========================= */
 
 .demo-overlay{
+
   position: fixed;
   inset: 0;
 
-  background: rgba(3,6,20,.72);
-
-  /* BLUR EFFECT */
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  width: 100%;
+  height: 100%;
 
   overflow-y: auto;
 
-  padding: 50px 20px;
+  background:
+    rgba(3,6,20,.72);
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  padding:
+    clamp(14px,3vw,40px);
 
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
 
   z-index: 999999;
 }
@@ -28,70 +47,101 @@
 ========================= */
 
 .demo-modal{
-  width: min(760px,100%);
-  max-width: 95%;
 
-  background: rgba(8,12,28,.96);
+  position: relative;
 
-  border: 1px solid rgba(255,255,255,.08);
+  width: 100%;
+  max-width: 760px;
+
+  background:
+    rgba(8,12,28,.96);
+
+  border:
+    1px solid rgba(255,255,255,.08);
 
   box-shadow:
     0 30px 100px rgba(0,0,0,.45);
 
-  border-radius: 28px;
+  border-radius:
+    clamp(18px,3vw,28px);
 
-  padding: 34px;
+  padding:
+    clamp(18px,4vw,34px);
 
   color: white;
 
-  position: relative;
+  overflow: hidden;
 
-  overflow: visible;
-
-  animation: pop .22s ease;
+  animation: pop .25s ease;
 }
 
+/* =========================
+   ANIMATION
+========================= */
+
 @keyframes pop{
+
   from{
-    transform: scale(.95) translateY(18px);
+    transform:
+      scale(.96)
+      translateY(18px);
+
     opacity: 0;
   }
 
   to{
-    transform: scale(1) translateY(0);
+    transform:
+      scale(1)
+      translateY(0);
+
     opacity: 1;
   }
 }
 
 /* =========================
-   CLOSE
+   CLOSE BUTTON
 ========================= */
 
 .close-btn{
+
   position: absolute;
 
-  right: 18px;
-  top: 18px;
+  top: 16px;
+  right: 16px;
 
-  width: 40px;
-  height: 40px;
+  width:
+    clamp(34px,5vw,42px);
+
+  height:
+    clamp(34px,5vw,42px);
 
   border: none;
+
   border-radius: 14px;
 
-  background: rgba(255,255,255,.08);
+  background:
+    rgba(255,255,255,.08);
 
   color: white;
 
-  font-size: 16px;
+  font-size:
+    clamp(14px,2vw,17px);
 
   cursor: pointer;
 
   transition: .2s ease;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 20;
 }
 
 .close-btn:hover{
-  background: rgba(255,255,255,.16);
+
+  background:
+    rgba(255,255,255,.16);
 }
 
 /* =========================
@@ -99,24 +149,38 @@
 ========================= */
 
 .demo-title{
-  font-size: 38px;
+
+  margin: 0;
+
+  font-size:
+    clamp(28px,5vw,40px);
+
   font-weight: 700;
 
-  margin-bottom: 8px;
+  line-height: 1.2;
 
-  background: linear-gradient(
-    90deg,
-    #c77dff,
-    #ff7ad9
-  );
+  background:
+    linear-gradient(
+      90deg,
+      #c77dff,
+      #ff7ad9
+    );
 
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .demo-sub{
-  color: #c7c2ef;
+
+  margin-top: 10px;
   margin-bottom: 28px;
+
+  color: #c7c2ef;
+
+  font-size:
+    clamp(14px,2vw,16px);
+
+  line-height: 1.6;
 }
 
 /* =========================
@@ -124,17 +188,25 @@
 ========================= */
 
 .demo-form{
+
   display: grid;
 
   grid-template-columns:
     repeat(2,minmax(0,1fr));
 
-  gap: 22px;
+  gap:
+    clamp(16px,2vw,22px);
 }
 
+/* =========================
+   ROW
+========================= */
+
 .demo-row{
+
   display: flex;
   flex-direction: column;
+
   gap: 8px;
 
   min-width: 0;
@@ -149,8 +221,13 @@
 ========================= */
 
 .demo-row label{
-  font-size: 14px;
+
+  font-size:
+    clamp(13px,2vw,14px);
+
   color: #dfdcff;
+
+  font-weight: 500;
 }
 
 /* =========================
@@ -160,9 +237,13 @@
 .demo-row input,
 .demo-row select,
 .react-datepicker__input-container input{
+
   width: 100%;
 
-  height: 56px;
+  min-width: 0;
+
+  height:
+    clamp(50px,6vw,56px);
 
   background:
     rgba(255,255,255,.08);
@@ -170,29 +251,43 @@
   border:
     1px solid rgba(255,255,255,.12);
 
-  border-radius: 16px;
+  border-radius:
+    clamp(12px,2vw,16px);
 
-  padding: 0 16px;
+  padding:
+    0 clamp(12px,2vw,16px);
 
   color: white;
-  font-size: 15px;
+
+  font-size:
+    clamp(14px,2vw,15px);
 
   outline: none;
 
   transition: .2s ease;
-
-  box-sizing: border-box;
 }
+
+/* =========================
+   PLACEHOLDER
+========================= */
 
 .demo-row input::placeholder,
 .react-datepicker__input-container input::placeholder{
-  color: rgba(255,255,255,.55);
+
+  color:
+    rgba(255,255,255,.55);
 }
+
+/* =========================
+   FOCUS
+========================= */
 
 .demo-row input:focus,
 .demo-row select:focus,
 .react-datepicker__input-container input:focus{
-  border: 1px solid #b76cff;
+
+  border:
+    1px solid #b76cff;
 
   box-shadow:
     0 0 0 4px rgba(183,108,255,.16);
@@ -203,21 +298,25 @@
 ========================= */
 
 .contact-row{
+
   display: flex;
   align-items: center;
+
   gap: 10px;
 
   width: 100%;
 }
 
-/* COUNTRY CODE SMALL */
+/* =========================
+   COUNTRY CODE
+========================= */
 
 .country-code{
-  width: 78px !important;
-  min-width: 78px;
-  max-width: 78px;
 
-  padding: 0 10px !important;
+  width: 84px !important;
+  min-width: 84px;
+
+  padding: 0 8px !important;
 
   text-align: center;
 
@@ -229,12 +328,15 @@
   flex-shrink: 0;
 }
 
-/* CONTACT INPUT FIX */
+/* =========================
+   CONTACT INPUT
+========================= */
 
 .contact-row input{
+
   flex: 1;
+
   width: 100%;
-  min-width: 0;
 }
 
 /* =========================
@@ -242,6 +344,7 @@
 ========================= */
 
 .duration-select{
+
   background: white !important;
   color: black !important;
 
@@ -250,12 +353,13 @@
 
 .duration-select option,
 .country-code option{
+
   background: white !important;
   color: black !important;
 }
 
 /* =========================
-   DATE PICKER INPUT
+   DATE PICKER
 ========================= */
 
 .date-picker{
@@ -267,7 +371,9 @@
 ========================= */
 
 .react-datepicker{
-  background: #111827 !important;
+
+  background:
+    #111827 !important;
 
   border:
     1px solid rgba(255,255,255,.12);
@@ -278,29 +384,35 @@
 
   box-shadow:
     0 25px 80px rgba(0,0,0,.5);
+
+  font-size: 14px;
 }
 
 /* HEADER */
 
 .react-datepicker__header{
-  background: #1f2937 !important;
+
+  background:
+    #1f2937 !important;
 
   border-bottom:
     1px solid rgba(255,255,255,.08);
 }
 
-/* TEXT WHITE */
+/* TEXT */
 
 .react-datepicker__current-month,
 .react-datepicker-time__header,
 .react-datepicker__day-name,
 .react-datepicker__day{
+
   color: white !important;
 }
 
-/* TIME LIST TEXT BLACK */
+/* TIME */
 
 .react-datepicker__time-list-item{
+
   color: black !important;
   background: white !important;
 }
@@ -308,11 +420,13 @@
 /* HOVER */
 
 .react-datepicker__day:hover{
+
   background:
     rgba(168,85,247,.3);
 }
 
 .react-datepicker__time-list-item:hover{
+
   background:
     rgba(168,85,247,.2) !important;
 
@@ -323,6 +437,7 @@
 
 .react-datepicker__day--selected,
 .react-datepicker__day--keyboard-selected{
+
   background:
     #a855f7 !important;
 
@@ -330,6 +445,7 @@
 }
 
 .react-datepicker__time-list-item--selected{
+
   background:
     #a855f7 !important;
 
@@ -347,6 +463,7 @@
 ========================= */
 
 .time-slot{
+
   display: flex;
   align-items: center;
 
@@ -356,13 +473,16 @@
 }
 
 .time-slot input{
+
   flex: 1;
 
   min-width: 0;
 
-  height: 54px;
+  height:
+    clamp(50px,6vw,54px);
 
-  border-radius: 14px;
+  border-radius:
+    clamp(12px,2vw,14px);
 
   background:
     rgba(255,255,255,.08);
@@ -370,12 +490,14 @@
   border:
     1px solid rgba(255,255,255,.12);
 
-  padding: 0 16px;
+  padding:
+    0 clamp(12px,2vw,16px);
 
   color: white;
 }
 
 .time-separator{
+
   color: #ddd;
 
   font-weight: 600;
@@ -384,6 +506,7 @@
 }
 
 .end-time{
+
   background:
     rgba(255,255,255,.04) !important;
 }
@@ -393,8 +516,13 @@
 ========================= */
 
 .error{
+
   color: #ff6b6b;
-  font-size: 12px;
+
+  font-size:
+    clamp(11px,2vw,12px);
+
+  line-height: 1.4;
 }
 
 /* =========================
@@ -402,12 +530,16 @@
 ========================= */
 
 .demo-submit{
+
   width: 100%;
 
-  height: 58px;
+  height:
+    clamp(52px,6vw,58px);
 
   border: none;
-  border-radius: 18px;
+
+  border-radius:
+    clamp(14px,2vw,18px);
 
   background:
     linear-gradient(
@@ -418,21 +550,54 @@
 
   color: white;
 
-  font-size: 16px;
+  font-size:
+    clamp(15px,2vw,16px);
+
   font-weight: 700;
 
   cursor: pointer;
 
   transition: .2s ease;
+
+  margin-top: 6px;
 }
 
 .demo-submit:hover{
-  transform: translateY(-2px);
+
+  transform:
+    translateY(-2px);
 }
 
 .demo-submit:disabled{
+
   opacity: .6;
+
   cursor: not-allowed;
+
+  transform: none;
+}
+
+/* =========================
+   DISABLED BUTTON
+========================= */
+
+.disabled-btn{
+
+  opacity: .7;
+
+  cursor: not-allowed;
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 900px){
+
+  .demo-modal{
+
+    max-width: 95%;
+  }
 }
 
 /* =========================
@@ -442,36 +607,112 @@
 @media (max-width: 768px){
 
   .demo-overlay{
-    padding: 20px;
+
+    padding: 14px;
+
     align-items: center;
   }
 
   .demo-modal{
-    padding: 24px;
+
+    width: 100%;
+
+    max-height: 95vh;
+
+    overflow-y: auto;
   }
 
   .demo-form{
+
     grid-template-columns: 1fr;
   }
 
-  .contact-row{
-    flex-direction: row;
-  }
-
   .time-slot{
+
     flex-direction: column;
+
     align-items: stretch;
   }
 
-  .time-slot input{
-    width: 100%;
+  .time-separator{
+
+    text-align: center;
+  }
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 480px){
+
+  .demo-overlay{
+
+    padding: 10px;
   }
 
-  .time-separator{
-    text-align: center;
+  .demo-modal{
+
+    border-radius: 18px;
+
+    padding: 18px;
+  }
+
+  .contact-row{
+
+    gap: 8px;
+  }
+
+  .country-code{
+
+    width: 74px !important;
+    min-width: 74px;
+
+    font-size: 13px;
+  }
+
+  .close-btn{
+
+    top: 12px;
+    right: 12px;
+  }
+
+  .demo-sub{
+
+    margin-bottom: 22px;
+  }
+}
+
+/* =========================
+   EXTRA SMALL DEVICES
+========================= */
+
+@media (max-width: 360px){
+
+  .demo-modal{
+
+    padding: 16px;
   }
 
   .demo-title{
-    font-size: 30px;
+
+    padding-right: 42px;
+  }
+
+  .country-code{
+
+    width: 68px !important;
+    min-width: 68px;
+  }
+
+  .demo-row input,
+  .demo-row select{
+
+    font-size: 13px;
+  }
+
+  .demo-submit{
+
+    font-size: 14px;
   }
 }

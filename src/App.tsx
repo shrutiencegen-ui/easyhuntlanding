@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 import ShowcasePage from "./components/ShowcaseSection";
 import ScrollToTop from "./components/ScrollToTop";
 import DemoModal from "./components/DemoModal";
+import { Toaster } from "react-hot-toast";
 export default function App() {
 
   // GLOBAL modal state
@@ -18,6 +19,10 @@ export default function App() {
   return (
     <BrowserRouter>
     <ScrollToTop />
+    <Toaster
+  position="top-right"
+  reverseOrder={false}
+/>
 
       {/* Navbar gets openDemo */}
       <Navbar openDemo={openDemo} />
