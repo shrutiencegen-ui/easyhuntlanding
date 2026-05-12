@@ -1,13 +1,20 @@
-/* BACKDROP */
+/* =========================
+   BACKDROP
+========================= */
+
 .demo-overlay{
   position: fixed;
   inset: 0;
-  background: rgba(5,5,15,.78);
-  backdrop-filter: blur(10px);
 
-  /* IMPORTANT FIX */
+  background: rgba(3,6,20,.72);
+
+  /* BLUR EFFECT */
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
   overflow-y: auto;
-  padding: 60px 20px;
+
+  padding: 50px 20px;
 
   display: flex;
   justify-content: center;
@@ -16,101 +23,455 @@
   z-index: 999999;
 }
 
-/* MODAL BOX */
+/* =========================
+   MODAL
+========================= */
+
 .demo-modal{
-  width: 460px;
+  width: min(760px,100%);
   max-width: 95%;
-  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 22px;
-  padding: 36px;
+
+  background: rgba(8,12,28,.96);
+
+  border: 1px solid rgba(255,255,255,.08);
+
+  box-shadow:
+    0 30px 100px rgba(0,0,0,.45);
+
+  border-radius: 28px;
+
+  padding: 34px;
+
   color: white;
+
   position: relative;
-  animation: pop .25s ease;
+
+  overflow: visible;
+
+  animation: pop .22s ease;
 }
 
 @keyframes pop{
   from{
-    transform: scale(.9) translateY(20px);
-    opacity:0;
+    transform: scale(.95) translateY(18px);
+    opacity: 0;
   }
+
   to{
-    transform: scale(1);
-    opacity:1;
+    transform: scale(1) translateY(0);
+    opacity: 1;
   }
 }
 
-/* CLOSE */
+/* =========================
+   CLOSE
+========================= */
+
 .close-btn{
   position: absolute;
-  right: 16px;
-  top: 16px;
-  width: 32px;
-  height: 32px;
+
+  right: 18px;
+  top: 18px;
+
+  width: 40px;
+  height: 40px;
+
   border: none;
-  border-radius: 10px;
+  border-radius: 14px;
+
   background: rgba(255,255,255,.08);
+
   color: white;
+
+  font-size: 16px;
+
   cursor: pointer;
+
+  transition: .2s ease;
 }
 
-/* TITLE */
+.close-btn:hover{
+  background: rgba(255,255,255,.16);
+}
+
+/* =========================
+   TITLE
+========================= */
+
 .demo-title{
-  font-size: 26px;
+  font-size: 38px;
   font-weight: 700;
-  background: linear-gradient(90deg,#c77dff,#ff7ad9);
+
+  margin-bottom: 8px;
+
+  background: linear-gradient(
+    90deg,
+    #c77dff,
+    #ff7ad9
+  );
+
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .demo-sub{
-  color: #bfbbe6;
-  margin-bottom: 22px;
-  margin-top: 6px;
+  color: #c7c2ef;
+  margin-bottom: 28px;
 }
 
-/* FORM */
+/* =========================
+   FORM
+========================= */
+
+.demo-form{
+  display: grid;
+
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+  gap: 22px;
+}
+
 .demo-row{
   display: flex;
   flex-direction: column;
-  margin-bottom: 16px;
+  gap: 8px;
+
+  min-width: 0;
 }
+
+.full-width{
+  grid-column: 1 / -1;
+}
+
+/* =========================
+   LABEL
+========================= */
 
 .demo-row label{
-  font-size: 13px;
-  margin-bottom: 6px;
-  color: #dcd9ff;
+  font-size: 14px;
+  color: #dfdcff;
 }
 
-.demo-row input{
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 10px;
-  padding: 12px;
+/* =========================
+   INPUTS
+========================= */
+
+.demo-row input,
+.demo-row select,
+.react-datepicker__input-container input{
+  width: 100%;
+
+  height: 56px;
+
+  background:
+    rgba(255,255,255,.08);
+
+  border:
+    1px solid rgba(255,255,255,.12);
+
+  border-radius: 16px;
+
+  padding: 0 16px;
+
   color: white;
+  font-size: 15px;
+
   outline: none;
+
+  transition: .2s ease;
+
+  box-sizing: border-box;
 }
 
-.demo-row input:focus{
-  border: 1px solid #a855f7;
-  box-shadow: 0 0 0 2px rgba(168,85,247,.25);
+.demo-row input::placeholder,
+.react-datepicker__input-container input::placeholder{
+  color: rgba(255,255,255,.55);
 }
 
-/* BUTTON */
+.demo-row input:focus,
+.demo-row select:focus,
+.react-datepicker__input-container input:focus{
+  border: 1px solid #b76cff;
+
+  box-shadow:
+    0 0 0 4px rgba(183,108,255,.16);
+}
+
+/* =========================
+   CONTACT ROW
+========================= */
+
+.contact-row{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  width: 100%;
+}
+
+/* COUNTRY CODE SMALL */
+
+.country-code{
+  width: 78px !important;
+  min-width: 78px;
+  max-width: 78px;
+
+  padding: 0 10px !important;
+
+  text-align: center;
+
+  background: white !important;
+  color: black !important;
+
+  font-weight: 600;
+
+  flex-shrink: 0;
+}
+
+/* CONTACT INPUT FIX */
+
+.contact-row input{
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+}
+
+/* =========================
+   SELECTS
+========================= */
+
+.duration-select{
+  background: white !important;
+  color: black !important;
+
+  font-weight: 600;
+}
+
+.duration-select option,
+.country-code option{
+  background: white !important;
+  color: black !important;
+}
+
+/* =========================
+   DATE PICKER INPUT
+========================= */
+
+.date-picker{
+  cursor: pointer;
+}
+
+/* =========================
+   DATEPICKER POPUP
+========================= */
+
+.react-datepicker{
+  background: #111827 !important;
+
+  border:
+    1px solid rgba(255,255,255,.12);
+
+  border-radius: 18px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 25px 80px rgba(0,0,0,.5);
+}
+
+/* HEADER */
+
+.react-datepicker__header{
+  background: #1f2937 !important;
+
+  border-bottom:
+    1px solid rgba(255,255,255,.08);
+}
+
+/* TEXT WHITE */
+
+.react-datepicker__current-month,
+.react-datepicker-time__header,
+.react-datepicker__day-name,
+.react-datepicker__day{
+  color: white !important;
+}
+
+/* TIME LIST TEXT BLACK */
+
+.react-datepicker__time-list-item{
+  color: black !important;
+  background: white !important;
+}
+
+/* HOVER */
+
+.react-datepicker__day:hover{
+  background:
+    rgba(168,85,247,.3);
+}
+
+.react-datepicker__time-list-item:hover{
+  background:
+    rgba(168,85,247,.2) !important;
+
+  color: black !important;
+}
+
+/* SELECTED */
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected{
+  background:
+    #a855f7 !important;
+
+  color: white !important;
+}
+
+.react-datepicker__time-list-item--selected{
+  background:
+    #a855f7 !important;
+
+  color: white !important;
+}
+
+/* REMOVE TRIANGLE */
+
+.react-datepicker__triangle{
+  display: none;
+}
+
+/* =========================
+   TIME SLOT
+========================= */
+
+.time-slot{
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  width: 100%;
+}
+
+.time-slot input{
+  flex: 1;
+
+  min-width: 0;
+
+  height: 54px;
+
+  border-radius: 14px;
+
+  background:
+    rgba(255,255,255,.08);
+
+  border:
+    1px solid rgba(255,255,255,.12);
+
+  padding: 0 16px;
+
+  color: white;
+}
+
+.time-separator{
+  color: #ddd;
+
+  font-weight: 600;
+
+  flex-shrink: 0;
+}
+
+.end-time{
+  background:
+    rgba(255,255,255,.04) !important;
+}
+
+/* =========================
+   ERROR
+========================= */
+
+.error{
+  color: #ff6b6b;
+  font-size: 12px;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
 .demo-submit{
   width: 100%;
-  margin-top: 10px;
-  padding: 14px;
-  border-radius: 12px;
+
+  height: 58px;
+
   border: none;
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #c77dff,
+      #ff7ad9
+    );
+
   color: white;
-  font-weight: 600;
+
+  font-size: 16px;
+  font-weight: 700;
+
   cursor: pointer;
-  background: linear-gradient(90deg,#7c3aed,#d946ef);
-  transition: .25s;
+
+  transition: .2s ease;
 }
 
 .demo-submit:hover{
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(168,85,247,.35);
+}
+
+.demo-submit:disabled{
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px){
+
+  .demo-overlay{
+    padding: 20px;
+    align-items: center;
+  }
+
+  .demo-modal{
+    padding: 24px;
+  }
+
+  .demo-form{
+    grid-template-columns: 1fr;
+  }
+
+  .contact-row{
+    flex-direction: row;
+  }
+
+  .time-slot{
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .time-slot input{
+    width: 100%;
+  }
+
+  .time-separator{
+    text-align: center;
+  }
+
+  .demo-title{
+    font-size: 30px;
+  }
 }

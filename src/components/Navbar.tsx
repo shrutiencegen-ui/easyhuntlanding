@@ -143,13 +143,37 @@ export default function Navbar({ openDemo }: Props) {
           </nav>
 
           {/* CTA */}
-          <button
-            onClick={openDemo}
-            className="relative px-4 py-2.5 md:px-5 md:py-2.5 lg:px-7 lg:py-3 rounded-xl text-white text-sm font-medium bg-gradient-to-r from-indigo-500 to-purple-600 shadow-lg shadow-purple-700/30 hover:shadow-purple-700/60 transition-all overflow-hidden whitespace-nowrap"
-          >
-            <span className="relative z-10">Book a Demo</span>
-            <span className="absolute inset-0 bg-white/10 opacity-0 hover:opacity-100 transition" />
-          </button>
+        {/* CTA BUTTONS */}
+<div className="hidden md:flex items-center gap-3">
+
+            {/* LOGIN BUTTON */}
+            <button
+              onClick={() =>
+                window.open(
+                  "https://easyhunt.in/login",
+                  "_self"
+                )
+              }
+              className="px-5 py-2.5 rounded-xl border border-white/15
+              bg-white/5 text-white text-sm font-medium
+              hover:bg-white/10 transition-all duration-300"
+            >
+              Login
+            </button>
+
+              {/* BOOK DEMO BUTTON */}
+                <button
+                  onClick={openDemo}
+                  className="relative px-4 py-2.5 md:px-5 md:py-2.5 lg:px-7 lg:py-3 rounded-xl text-white text-sm font-medium bg-gradient-to-r from-indigo-500 to-purple-600 shadow-lg shadow-purple-700/30 hover:shadow-purple-700/60 transition-all overflow-hidden whitespace-nowrap"
+                >
+                  <span className="relative z-10">
+                    Book a Demo
+                  </span>
+
+                  <span className="absolute inset-0 bg-white/10 opacity-0 hover:opacity-100 transition" />
+                </button>
+
+              </div>
 
           {/* Mobile Toggle */}
           <button className="md:hidden text-white" onClick={() => setOpen(!open)}>
@@ -180,6 +204,16 @@ export default function Navbar({ openDemo }: Props) {
             >
               Book a Demo
             </button>
+                        <MobileLink
+              onClick={() =>
+                window.open(
+                  "https://easyhunt.in/login",
+                  "_self"
+                )
+              }
+            >
+              Login
+            </MobileLink>
           </motion.div>
         )}
       </AnimatePresence>
