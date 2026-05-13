@@ -252,7 +252,31 @@
 
   color: rgba(255,255,255,0.72);
 }
+.discover-card:hover {
+  
+  transform: translateY(-15px) scale(1.02);
+  
 
+  border-color: rgba(255, 255, 255, 0.25);
+  
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(59, 130, 246, 0.1); /* Sublte glow */
+}
+.discover-card:hover .discover-icon {
+  transform: scale(1.1) rotate(-5deg);
+  transition: transform 0.4s ease;
+}
+
+.discover-card:hover h2 {
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.discover-card:hover p {
+  color: rgba(255, 255, 255, 0.9);
+  transition: color 0.3s ease;
+}
 /* QUOTE */
 
 .discover-quote {
