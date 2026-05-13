@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
 import DemoModal from "./DemoModal";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 type Props = {
   openDemo: () => void;
@@ -148,9 +149,15 @@ const [demoOpen, setDemoOpen] = useState(false);
             </motion.div>
           </Button>
 
-          <Button size="lg" variant="outline">
+         <Link to="/discover">
+          <Button
+            size="lg"
+            variant="outline"
+            className="hero-learn-btn"
+          >
             Learn More
           </Button>
+        </Link>
         </div>
       </motion.div>
     </section>

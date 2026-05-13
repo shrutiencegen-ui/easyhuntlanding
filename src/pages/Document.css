@@ -1,0 +1,86 @@
+.doc-page {
+  min-height: 100vh;
+  padding: 100px 20px;
+  background: radial-gradient(circle at top, #1a0b2e, #05010a);
+  color: white;
+}
+
+/* BACK BUTTON */
+.back-btn {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  color: #aaa;
+  margin-bottom: 30px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.back-btn:hover {
+  color: white;
+  transform: translateX(-5px);
+}
+
+/* HERO */
+.doc-hero {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.doc-hero h1 {
+  font-size: clamp(32px, 5vw, 60px);
+  font-weight: 800;
+}
+
+.doc-hero p {
+  color: #bbb;
+  margin-top: 10px;
+}
+
+/* GRID */
+.doc-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 60px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+/* TEXT */
+.doc-text p {
+  margin-bottom: 25px;
+  line-height: 1.8;
+  color: #cbd5e1;
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+.doc-text p:hover {
+  color: white;
+  transform: translateX(5px);
+}
+
+/* CARD */
+.doc-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 25px;
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+}
+
+.doc-card h3 {
+  margin-bottom: 15px;
+}
+
+.benefit {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .doc-container {
+    grid-template-columns: 1fr;
+  }
+}

@@ -78,10 +78,18 @@ export default function ProductVisualizationSection() {
   </div>
 
 </div>
-            <Button size="lg" variant="default" className="px-10">
-              Learn More
-              <ArrowRight className="w-5 h-5 text-purple-400 group-hover:text-white transition-all duration-300 group-hover:translate-x-1" />
-            </Button>
+           <Button
+  size="lg"
+  variant="default"
+  className="px-10 group"
+  onClick={() => {
+    window.location.href = "/features";
+  }}
+>
+  Learn More
+
+  <ArrowRight className="w-5 h-5 text-purple-400 group-hover:text-white transition-all duration-300 group-hover:translate-x-1" />
+</Button>
           </motion.div>
 
           {/* RIGHT 3D PLANET ANIMATION */}

@@ -444,7 +444,10 @@ export default function DemoModal({
       );
 
       toast.success(
-        "Demo scheduled successfully 🚀"
+        "Demo scheduled successfully 🚀",
+          {
+    duration: 4000,
+  }
       );
 
       console.log(
@@ -478,7 +481,10 @@ export default function DemoModal({
       );
 
       toast.error(
-        "Failed to schedule demo"
+        "Failed to schedule demo",
+          {
+    duration: 4000,
+  }
       );
 
     } finally {

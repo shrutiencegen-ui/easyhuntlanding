@@ -61,11 +61,13 @@ export default function ArticlesSection() {
                   <p className="text-body text-gray-300 mb-6 line-clamp-3">
                     {article.excerpt}
                   </p>
-                  <motion.div whileHover={{ x: 5 }} className="mt-auto">
-                    <Button variant="ghost" size="sm" className="gap-2">
-                      Read More <ArrowRight className="w-4 h-4" />
-                    </Button>
-                  </motion.div>
+            <motion.div whileHover={{ x: 5 }} className="mt-auto">
+          <Link to={`/article/${article.id}`}>
+            <Button variant="ghost" size="sm" className="gap-2">
+              Read More <ArrowRight className="w-4 h-4" />
+            </Button>
+          </Link>
+        </motion.div>
                 </div>
               </Card>
             </motion.article>
