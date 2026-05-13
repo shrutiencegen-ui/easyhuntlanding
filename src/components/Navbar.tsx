@@ -11,6 +11,7 @@ export default function Navbar({ openDemo }: Props) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("home");
+  const [isScrolling, setIsScrolling] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -51,9 +52,9 @@ export default function Navbar({ openDemo }: Props) {
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActive(entry.target.id);
-        }
+        if (entry.isIntersecting && !isScrolling) {
+  setActive(entry.target.id);
+}
       });
     };
 
@@ -93,9 +94,13 @@ export default function Navbar({ openDemo }: Props) {
   /* Nav click */
 const scrollToSection = (id: string) => {
   setOpen(false);
+
+  // immediately active set
   setActive(id);
 
-  
+  // observer temporarily stop
+  setIsScrolling(true);
+
   if (location.pathname !== "/") {
     navigate("/");
 
@@ -103,11 +108,23 @@ const scrollToSection = (id: string) => {
       const section = document.getElementById(id);
 
       if (section) {
-        section.scrollIntoView({
+        const offset = 85;
+
+        const top =
+          section.getBoundingClientRect().top +
+          window.pageYOffset -
+          offset;
+
+        window.scrollTo({
+          top,
           behavior: "smooth",
-          block: "start",
         });
       }
+
+      // re-enable observer
+      setTimeout(() => {
+        setIsScrolling(false);
+      }, 1000);
     }, 500);
 
     return;
@@ -116,11 +133,23 @@ const scrollToSection = (id: string) => {
   const section = document.getElementById(id);
 
   if (section) {
-    section.scrollIntoView({
+    const offset = 85;
+
+    const top =
+      section.getBoundingClientRect().top +
+      window.pageYOffset -
+      offset;
+
+    window.scrollTo({
+      top,
       behavior: "smooth",
-      block: "start",
     });
   }
+
+  // re-enable observer after scroll
+  setTimeout(() => {
+    setIsScrolling(false);
+  }, 1000);
 };
 
   /* Handle hash navigation */
