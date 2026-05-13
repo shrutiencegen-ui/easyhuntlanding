@@ -71,9 +71,18 @@ const contentData = {
 };
 
 export default function Document() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const data = contentData[id];
+const { id } =
+  useParams<{ id: string }>();
+
+const navigate =
+  useNavigate();
+
+const data =
+  id
+    ? contentData[
+        id as keyof typeof contentData
+      ]
+    : null;
 
   if (!data) return <div className="text-white p-10 text-center font-mono">Data Not Found</div>;
 
