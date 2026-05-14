@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { Mail, Phone, Send } from "lucide-react";
 import emailjs from "@emailjs/browser";
-import toast  from "react-hot-toast";
+import toast from "react-hot-toast";
 
 import "./contact.css";
 
@@ -20,6 +20,9 @@ export default function ContactSection() {
     );
 
   const [loading, setLoading] =
+    useState(false);
+
+  const [submitted, setSubmitted] =
     useState(false);
 
   const [errors, setErrors] =
@@ -54,6 +57,14 @@ export default function ContactSection() {
         }
 
         else if (
+          trimmedValue.length < 3
+        ) {
+
+          error =
+            "Minimum 3 characters required";
+        }
+
+        else if (
           trimmedValue.length > 32
         ) {
 
@@ -68,7 +79,7 @@ export default function ContactSection() {
         ) {
 
           error =
-            "Numbers & Special characters not supported";
+            "Only alphabets allowed";
         }
 
       break;
@@ -86,6 +97,26 @@ export default function ContactSection() {
         }
 
         else if (
+          /[A-Z]/.test(
+            trimmedValue
+          )
+        ) {
+
+          error =
+            "Capital letters not allowed";
+        }
+
+        else if (
+          /^\d/.test(
+            trimmedValue
+          )
+        ) {
+
+          error =
+            "Email cannot start with number";
+        }
+
+        else if (
           trimmedValue.length > 60
         ) {
 
@@ -94,13 +125,13 @@ export default function ContactSection() {
         }
 
         else if (
-          !/^\S+@\S+\.\S+$/.test(
+          !/^[a-z][a-z0-9._%+-]*@[a-z0-9.-]+\.[a-z]{2,}$/.test(
             trimmedValue
           )
         ) {
 
           error =
-            "Enter valid email";
+            "Enter valid email address";
         }
 
       break;
@@ -147,6 +178,14 @@ export default function ContactSection() {
 
           error =
             "Message is required";
+        }
+
+        else if (
+          trimmedValue.length < 15
+        ) {
+
+          error =
+            "Minimum 15 characters required";
         }
 
         else if (
@@ -205,7 +244,35 @@ export default function ContactSection() {
         setErrors(prev => ({
           ...prev,
           user_name:
-            "Special characters not supported",
+            "Special characters & numbers not allowed",
+        }));
+
+        return;
+      }
+    }
+
+    /* =========================
+       EMAIL
+    ========================= */
+
+    if (
+      name === "user_email"
+    ) {
+
+      cleanedValue =
+        value
+          .replace(/\s/g, "");
+
+      if (
+        /[A-Z]/.test(
+          cleanedValue
+        )
+      ) {
+
+        setErrors(prev => ({
+          ...prev,
+          user_email:
+            "Capital letters not allowed",
         }));
 
         return;
@@ -265,136 +332,148 @@ export default function ContactSection() {
   /* =========================
      SUBMIT
   ========================= */
+const handleSubmit = async (
+  e: React.FormEvent<HTMLFormElement>
+) => {
 
-  const handleSubmit = async (
-    e:
-      React.FormEvent<
-        HTMLFormElement
-      >
-  ) => {
+  e.preventDefault();
 
-    e.preventDefault();
+  /* =========================
+     PREVENT DUPLICATE CLICK
+  ========================= */
 
-    if (loading) return;
+  if (loading) return;
 
-    const form =
-      formRef.current;
+  setLoading(true);
 
-    if (!form) return;
+  const form =
+    formRef.current;
 
-    const formData =
-      new FormData(form);
+  if (!form) {
 
-    const fields = {
+    setLoading(false);
+    return;
+  }
 
-      user_name:
-        formData
-          .get("user_name")
-          ?.toString() || "",
+  const formData =
+    new FormData(form);
 
-      user_email:
-        formData
-          .get("user_email")
-          ?.toString() || "",
+  const fields = {
 
-      user_phone:
-        formData
-          .get("user_phone")
-          ?.toString() || "",
+    user_name:
+      formData
+        .get("user_name")
+        ?.toString() || "",
 
-      message:
-        formData
-          .get("message")
-          ?.toString() || "",
-    };
+    user_email:
+      formData
+        .get("user_email")
+        ?.toString() || "",
 
-    /* =========================
-       VALIDATE ALL
-    ========================= */
+    user_phone:
+      formData
+        .get("user_phone")
+        ?.toString() || "",
 
-    const newErrors: Errors =
-      {};
+    message:
+      formData
+        .get("message")
+        ?.toString() || "",
+  };
 
-    Object.entries(fields).forEach(
-      ([key, value]) => {
+  /* =========================
+     VALIDATE
+  ========================= */
 
-        const error =
-          validateField(
-            key,
-            value
-          );
+  const newErrors: Errors =
+    {};
 
-        if (error) {
+  Object.entries(fields).forEach(
+    ([key, value]) => {
 
-          newErrors[
-            key as keyof Errors
-          ] = error;
-        }
+      const error =
+        validateField(
+          key,
+          value
+        );
+
+      if (error) {
+
+        newErrors[
+          key as keyof Errors
+        ] = error;
       }
+    }
+  );
+
+  setErrors(newErrors);
+
+  /* =========================
+     IF ERROR
+  ========================= */
+
+  if (
+    Object.keys(newErrors)
+      .length > 0
+  ) {
+
+    toast.error(
+      "Please fill all fields correctly ❌"
     );
 
-    setErrors(newErrors);
+    setLoading(false);
 
-    if (
-      Object.keys(newErrors)
-        .length > 0
-    ) {
+    return;
+  }
 
-      toast.error(
-        "Please fill all fields correctly ❌"
-      );
+  /* =========================
+     SEND EMAIL
+  ========================= */
 
-      return;
-    }
+  try {
 
-    /* =========================
-       EMAILJS
-    ========================= */
+    await emailjs.sendForm(
 
-    try {
+      import.meta.env
+        .VITE_EMAILJS_SERVICE_ID,
 
-      setLoading(true);
+      import.meta.env
+        .VITE_EMAILJS_CONTACT_TEMPLATE_ID,
 
-      await emailjs.sendForm(
+      form,
 
-        import.meta.env
-          .VITE_EMAILJS_SERVICE_ID,
+      import.meta.env
+        .VITE_EMAILJS_PUBLIC_KEY
+    );
 
-        import.meta.env
-          .VITE_EMAILJS_CONTACT_TEMPLATE_ID,
+    toast.success(
+      "Message sent successfully 🚀"
+    );
 
-        form,
+    /* RESET FORM */
 
-        import.meta.env
-          .VITE_EMAILJS_PUBLIC_KEY
-      );
+    form.reset();
 
-      toast.success(
-        "Message sent successfully 🚀"
-      );
+    setErrors({});
 
-      /* RESET */
+  } catch (error) {
 
-      form.reset();
+    console.error(
+      "FAILED...",
+      error
+    );
 
-      setErrors({});
+    toast.error(
+      "Failed to send message ❌"
+    );
 
-    } catch (error) {
+  } finally {
 
-      console.error(
-        "FAILED...",
-        error
-      );
+    /* BUTTON ENABLE AGAIN */
 
-      toast.error(
-        "Failed to send message ❌"
-      );
-
-    } finally {
-
-      setLoading(false);
-    }
-  };
+    setLoading(false);
+  }
+};
 
   return (
 
@@ -402,7 +481,6 @@ export default function ContactSection() {
       id="contact"
       className="contact-section"
     >
-
 
       <div className="contact-wrapper">
 
@@ -491,7 +569,7 @@ export default function ContactSection() {
             <input
               name="user_name"
               type="text"
-              maxLength={40}
+              maxLength={32}
               placeholder="Enter your full name"
               onChange={
                 handleChange
@@ -590,35 +668,26 @@ export default function ContactSection() {
 
           {/* BUTTON */}
 
-          <button
-            type="submit"
-            className={`send-btn ${
-              loading
-                ? "disabled-btn"
-                : ""
-            }`}
-            disabled={loading}
-          >
-
-            {loading ? (
-
-              <span className="flex items-center gap-2">
-                Sending...
-              </span>
-
-            ) : (
-
-              <span className="flex items-center gap-2">
-
-                Send Message
-
-                <Send size={16} />
-
-              </span>
-            )}
-
-          </button>
-
+         <button
+  type="submit"
+  className={`send-btn ${
+    loading
+      ? "disabled-btn"
+      : ""
+  }`}
+  disabled={loading}
+>
+  {loading ? (
+    <span>
+      Sending...
+    </span>
+  ) : (
+    <span className="flex items-center gap-2">
+      Send Message
+      <Send size={16} />
+    </span>
+  )}
+</button>
         </form>
 
       </div>
