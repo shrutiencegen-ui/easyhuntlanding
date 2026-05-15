@@ -1,5 +1,6 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Mail, Phone, ArrowUpRight } from "lucide-react";
+import { useState } from "react";
 
 type Props = {
   openDemo: () => void;
@@ -8,6 +9,9 @@ type Props = {
 export default function Footer({ openDemo }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
+  
+  const [open, setOpen] = useState(false)
+  const [active, setActive] = useState("home")
 
   const handleNavigation = (sectionId: string) => {
     if (location.pathname !== "/") {
@@ -21,7 +25,17 @@ export default function Footer({ openDemo }: Props) {
       if (element) element.scrollIntoView({ behavior: "smooth" });
     }
   };
+  
+  const scrollToSection = (id: string) => {
+    setOpen(false)
+    setActive(id)
 
+    if (location.pathname !== "/") {
+      navigate("/", { state: { scrollTo: id } })
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
+    }
+  }
   return (
     <footer className="relative bg-gradient-to-br from-[#0f0a1f] via-[#140a2a] to-[#1a0f35] text-white pt-24 pb-12 overflow-hidden">
 
@@ -31,17 +45,19 @@ export default function Footer({ openDemo }: Props) {
       <div className="relative max-w-7xl mx-auto px-8 md:px-16">
 
         {/* TOP */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-14 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-14 mb-16"   onClick={() => scrollToSection("home")}>
 
           {/* Logo */}
          <div className="flex flex-col gap-5">
-  <div className="flex items-center gap-2">
-   <img
-  src="/logo.png"
-  alt="Easy Hunt Logo"
-  className="h-12 sm:h-14 md:h-16 w-auto object-contain"
-/>
-  </div>
+         <div className="flex items-center gap-2">
+  <button onClick={() => handleNavigation("home")}>
+    <img
+      src="/logo.png"
+      alt="Easy Hunt Logo"
+      className="h-12 sm:h-14 md:h-16 w-auto object-contain"
+    />
+  </button>
+</div>
 
   <p className="max-w-sm text-base md:text-lg leading-relaxed text-gray-200 font-medium">
   Smart way to search Maharashtra property records.

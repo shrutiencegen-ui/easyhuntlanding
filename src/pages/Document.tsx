@@ -254,9 +254,9 @@ export default function Document() {
               <p className="text-sm uppercase tracking-[0.2em] text-purple-300">
                 Easy Hunt Feature
               </p>
-              <h2 className="text-3xl font-bold text-white mt-1">
-                Smart Property Intelligence
-              </h2>
+              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent mt-1">
+              Smart Property Intelligence
+            </h2>
             </div>
           </div>
 
@@ -290,9 +290,9 @@ export default function Document() {
                 </div>
 
                 <div className="flex-1">
-                  <h2 className="text-2xl md:text-3xl font-bold mb-5 text-white leading-snug">
-                    {section.title}
-                  </h2>
+                <h2 className="text-3xl md:text-4xl font-bold mb-5 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent leading-snug">
+  {section.title}
+</h2>
 
                   {section.text && (
                     <p className="text-gray-400 text-lg leading-relaxed">

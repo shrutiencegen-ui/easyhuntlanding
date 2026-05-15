@@ -148,18 +148,16 @@ export default function Navbar({ openDemo }: Props) {
 
             {/* LOGIN BUTTON */}
             <button
-              onClick={() =>
-                window.open(
-                  "https://easyhunt.in/login",
-                  "_self"
-                )
-              }
-              className="px-5 py-2.5 rounded-xl border border-white/15
-              bg-white/5 text-white text-sm font-medium
-              hover:bg-white/10 transition-all duration-300"
-            >
-              Login
-            </button>
+  onClick={() => window.open("https://easyhunt.in/login", "_self")}
+  className="px-5 py-2.5 rounded-xl text-sm font-medium text-white
+    bg-gradient-to-r from-purple-500 to-pink-500
+    hover:from-purple-400 hover:to-pink-400
+    shadow-[0_0_20px_rgba(168,85,247,0.4)]
+    hover:shadow-[0_0_30px_rgba(168,85,247,0.6)]
+    hover:scale-105 transition-all duration-300"
+>
+  Login
+</button>
 
               {/* BOOK DEMO BUTTON */}
                 <button
